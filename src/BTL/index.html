@@ -98,14 +98,17 @@
         </footer>
 
         <!-- Modal layout -->
-        <div class="modal">
+        <!-- Register-form -->
+        <div class="modal__register">
             <div class="modal__overlay">
 
             </div>
             <div class="modal__body">
-                <!-- Register-form -->
                 <div class="scrollable-container">
                     <div class="auth-form">
+                        <div class="auth-form__close">
+                            <i class="ti-close"></i>
+                        </div>
                         <div class="auth-form__container">
                             <div class="auth-form__header">
                                 <a href="">
@@ -140,9 +143,70 @@
                         <div class="auth-form__control">
                             <button class="auth-form__Btn">ĐĂNG KÝ</button>
                         </div>
+
+                        <div class="auth-form__log-in">
+                            <p class="auth-form__log-in-text">
+                                Bạn đã có tài khoản?
+                                <a href="" class="auth-form__log-in-link">Đăng nhập</a>
+                            </p>
+                        </div>
                         <div class="auth-form__aside">
                             <p class="auth-form__policy-text">
                                 Bằng việc đăng ký, Bạn đã đồng ý với chúng tôi về
+                                <a href="" class="auth-form__text-link">Điều khoản dịch vụ</a> &
+                                <a href="" class="auth-form__text-link">Chính sách bảo mật</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log-in-form -->
+        <div class="modal__log-in">
+            <div class="modal__overlay">
+
+            </div>
+            <div class="modal__body">
+                <div class="scrollable-container">
+                    <div class="auth-form">
+                        <div class="auth-form__close">
+                            <i class="ti-close"></i>
+                        </div>
+                        <div class="auth-form__container">
+                            <div class="auth-form__header">
+                                <a href="">
+                                    <img src="./assets/img/Logo-auth.png" alt="logo" class="auth-form__logo-img">
+                                </a>
+                                <h1 class="auth-form__heading">Đăng nhập vào khóa học</h1>
+                                <p class="auth-form__description">Chúc bạn có trải nghiệm tốt trong quá tình học tập</p>
+                            </div>
+                        </div>
+                        <div class="auth-form__form">
+                            <div class="auth-form__group">
+                                <label for="username" class="modal__label">Tên tài khoản / Email</label>
+                                <input type="text" class="auth-form__input" placeholder="Nguyễn Văn A / 123@gmail.com">
+                            </div>
+    
+                            <div class="auth-form__group">
+                                <label for="password" class="modal__label">Password</label>
+                                <input type="password" class="auth-form__input" placeholder="Mật khẩu của bạn">
+                            </div>
+                        </div>
+    
+                        <div class="auth-form__control">
+                            <button class="auth-form__Btn">ĐĂNG NHẬP</button>
+                        </div>
+
+                        <div class="auth-form__log-in">
+                            <p class="auth-form__log-in-text">
+                                Bạn chưa có tài khoản?
+                                <a href="" class="auth-form__log-in-link">Đăng ký</a>
+                            </p>
+                        </div>
+                        <div class="auth-form__aside">
+                            <p class="auth-form__policy-text">
+                                Với việc tiếp tục sử dụng trang web, Bạn đã đồng ý với chúng tôi về
                                 <a href="" class="auth-form__text-link">Điều khoản dịch vụ</a> &
                                 <a href="" class="auth-form__text-link">Chính sách bảo mật</a>
                             </p>

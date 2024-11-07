@@ -123,6 +123,35 @@
 
 /* Authen modal */
 /* Thanh cuộn */
+
+.modal__register {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    animation: fadeIn linear 0.1s;
+}
+
+.modal__register.open {
+    display: flex;
+}
+
+.modal__log-in {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    animation: fadeIn linear 0.1s;
+}
+
+.modal__log-in.open {
+    display: flex;
+}
+
 .scrollable-container {
     max-height: 600px;
     overflow-y: auto;
@@ -138,6 +167,20 @@
     background-color: var(--white-color);
     overflow: hidden;
     padding: 30px;
+}
+
+.auth-form__close {
+    position: absolute;
+    float: right;
+    right: 0;
+    top: 0;
+    padding: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.auth-form__close:hover {
+    opacity: 1;
 }
 
 .auth-form__header,
@@ -214,6 +257,17 @@
 
 .auth-form__Btn:hover {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+.auth-form__log-in {
+    margin-top: 18px;
+    font-size: 1rem;
+    text-align: center;
+    padding: 0 12px;
+}
+
+.auth-form__log-in-link {
+    color: #f33a58;
 }
 
 .auth-form__aside {
