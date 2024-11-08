@@ -1,11 +1,11 @@
 :root {
-    --primary-color: #EE4D2D;
+    --primary-color: #e63946;
     --white-color: #fff;
     --black-color: #000;
     --text-color: #333;
     --border-color: #dbdbdb;;
 
-    --header-height: 146.75px;
+    --header-height: 157.75px;
     --header__background-height: 104px;
     --header__navbar-height: calc(var(--header-height) - var(--header__background-height));
 }
@@ -19,6 +19,40 @@ html {
     line-height: 1.6rem;
     font-family: 'roboto', sans-serif;
     box-sizing: border-box;
+}
+
+/* Phần chung */
+.col-half {
+    width: 50%;
+}
+
+.col-fourth {
+    width: 25%;
+}
+
+/* Button */
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    border: none;
+    border-color: var(--text-color);
+    border-radius: 2px; 
+    font-size: 1.5rem;
+    padding: 0 12px;
+    outline: none;
+    cursor: pointer;
+    
+    
+    line-height: 1.6rem;
+}
+
+.btn.btn--primary {
+    color: var(--white-color);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 /* Animation */
@@ -72,9 +106,10 @@ html {
     margin-left: -15px;
 }
 
-.row_between {
+.row__between {
     justify-content: space-between;
 }
+
 
 
 
