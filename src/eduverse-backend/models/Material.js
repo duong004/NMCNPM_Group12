@@ -1,0 +1,1 @@
+// Mô hình dữ liệu cho tài liệu.
