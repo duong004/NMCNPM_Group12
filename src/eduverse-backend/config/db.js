@@ -1,12 +1,18 @@
 // Tệp cấu hình kết nối cơ sở dữ liệu.
 
+const mysql = require('mysql2'); 
+const dotenv = require('dotenv'); 
+
+// Nạp các biến từ tệp .env vào process.env 
+dotenv.config();
+
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password',
-  database: 'eduverse'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 connection.connect((err) => {
