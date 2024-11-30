@@ -1,3 +1,5 @@
+// Trang thông báo chức năng đang cập nhật
+
 import React from 'react';
 import './MaintenancePage.css';
 
