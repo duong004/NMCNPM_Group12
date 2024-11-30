@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import CoursesPage from './pages/CoursesPage';
 import LoginPage from './pages/LoginPage';
@@ -12,23 +12,17 @@ import ForgotPassword from './components/Auth/ForgotPassword';
 import ResetPassword from './components/Auth/ResetPassword';
 import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <PublicRoute exact path="/" component={HomePage} />
-        <PublicRoute path="/courses" component={CoursesPage} />
-        <PublicRoute path="/login" component={LoginPage} />
-        <PublicRoute path="/register" component={RegisterPage} />
-        <PublicRoute path="/forgot-password" component={ForgotPassword} />
-        <PublicRoute path="/reset-password/:token" component={ResetPassword} />
-        <PrivateRoute path="/dashboard" component={DashboardPage} />
-        <PrivateRoute path="/admin" component={AdminPage} />
-        <Route path="/maintenance" component={MaintenancePage} />
-        <Route component={NotFoundPage} />
-      </Switch>
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='/register' element={<Register />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
