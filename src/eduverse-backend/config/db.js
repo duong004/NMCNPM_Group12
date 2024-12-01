@@ -1,12 +1,13 @@
 // Tệp cấu hình kết nối cơ sở dữ liệu.
 
-const mysql = require('mysql2'); 
-const dotenv = require('dotenv'); 
-
-// Nạp các biến từ tệp .env vào process.env 
-dotenv.config();
-
+require('dotenv').config();
 const mysql = require('mysql2');
+
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_NAME:', process.env.DB_NAME);
+
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -16,7 +17,10 @@ const connection = mysql.createConnection({
 });
 
 connection.connect((err) => {
-  if (err) throw err;
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
   console.log('Connected to the MySQL server.');
 });
 
