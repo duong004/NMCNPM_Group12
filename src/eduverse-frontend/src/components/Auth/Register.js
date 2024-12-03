@@ -20,7 +20,7 @@ function Register() {
         setErrors(validationErrors)
 
         if (errors.name === "" && errors.email === "" && errors.password === "" ) {
-            axios.post('http://localhost:5000/register', values)
+            axios.post('http://localhost:5000/api/auth/register', values)
             .then(res => {
                 navigate('/login')
             })
