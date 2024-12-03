@@ -7,17 +7,13 @@ function Validation (values) {
         error.email = "Cần nhập Email"
     } else if (!email_pattern.test(values.email)) {
         error.email = "Sai định dạng email"
-    } else {
-        error.email = ""
-    }
+    } 
 
     if ( values.password === "") {
         error.password = "Cần nhập mật khẩu"
     } else if (!password_pattern.test(values.password)) {
         error.password = "Mật khẩu tối thiểu 6 ký tự"
-    } else {
-        error.password = ""
-    }
+    } 
 
     return error
 }

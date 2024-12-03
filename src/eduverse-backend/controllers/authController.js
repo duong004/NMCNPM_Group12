@@ -41,7 +41,6 @@ exports.register = async (req, res) => {
                     if (insertErr) {
                         return res.status(500).json({ message: "Lỗi server" });
                     }
-                    console.log("Thanh")
                     return res.status(201).json({ message: "Đăng ký thành công" });
                 });
             });
