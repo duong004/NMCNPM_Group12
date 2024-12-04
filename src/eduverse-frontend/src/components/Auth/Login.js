@@ -12,6 +12,7 @@ function Login() {
     const handleInput = (e) => {
         setValues(prev => ({...prev, [e.target.name]: e.target.value}))
     }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = Validation(values);
@@ -21,7 +22,7 @@ function Login() {
             try {
                 const res = await axios.post('http://localhost:5000/api/auth/login', values);
                 if (res.data.message === "Đăng nhập thành công") {
-                    navigate('/home');
+                    navigate('/homepage');
                 } else {
                     alert(res.data.message);
                 }
