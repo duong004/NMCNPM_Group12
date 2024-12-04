@@ -12,27 +12,28 @@ function Login() {
     const handleInput = (e) => {
         setValues(prev => ({...prev, [e.target.name]: e.target.value}))
     }
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const validationErrors = Validation(values)
-        setErrors(validationErrors)
 
-        if (errors.email === "" && errors.password === "" ) {
-            axios.post('http://localhost:5000/login', values)
-            .then(res => {
-                if (res.data === "success") {
-                    navigate('/homepage')
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const validationErrors = Validation(values);
+        setErrors(validationErrors);
+    
+        if (Object.keys(validationErrors).length === 0) {
+            try {
+                const res = await axios.post('http://localhost:5000/api/auth/login', values);
+                if (res.data.message === "Đăng nhập thành công") {
+                    navigate('/homepage');
                 } else {
-                    alert("Sai tên đăng nhập hoặc mật khẩu: " + res.data)
+                    alert(res.data.message);
                 }
-            })
-            .catch(err => console.log(err))
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            console.log("Form contains errors", validationErrors);
         }
-
-        if (Object.keys(validationErrors).length !== 0) {
-            console.log("Form contains errors", validationErrors)
-        } 
-    }
+    };
+    
     return (
         <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
             <div className='bg-white p-3 rounded w-25'>
