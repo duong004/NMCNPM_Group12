@@ -21,7 +21,7 @@ function Login() {
             axios.post('http://localhost:5000/login', values)
             .then(res => {
                 if (res.data === "success") {
-                    navigate('/home')
+                    navigate('/homepage')
                 } else {
                     alert("Sai tên đăng nhập hoặc mật khẩu: " + res.data)
                 }
