@@ -68,7 +68,14 @@ exports.login = async (req, res) => {
                 return res.status(400).json({ message: "Mật khẩu không đúng" });
             }
             const token = jwt.sign({ id: user.user_id }, 'secret', { expiresIn: '1h' });
-            return res.status(200).json({ message: "Đăng nhập thành công", token });
+            // Cập nhật last_login
+            const updateLastLoginSql = 'UPDATE users SET last_login = ? WHERE user_id = ?';
+            db.query(updateLastLoginSql, [new Date(), user.user_id], (updateErr) => {
+                if (updateErr) {
+                    return res.status(500).json({ message: "Lỗi server khi cập nhật thông tin đăng nhập" });
+                }
+                return res.status(200).json({ message: "Đăng nhập thành công", token });
+            });
         });
     } catch (error) {
         return res.status(500).json({ message: "Lỗi server" });
