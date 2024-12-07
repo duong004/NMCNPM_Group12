@@ -35,6 +35,7 @@ function Register() {
         <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
             <div className='bg-white p-3 rounded w-25'>
                 <form action="" onSubmit ={handleSubmit}>
+                    <h1 style={{ fontSize: '36px', textAlign: 'center' }}>Register</h1>
                     <div className='mb-3'>
                         <label htmlFor="name">
                             name:
