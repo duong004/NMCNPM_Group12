@@ -38,8 +38,9 @@ function Login() {
         <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
             <div className='bg-white p-3 rounded w-25'>
                 <form action="" onSubmit={handleSubmit}>
+                    <h1 style={{ fontSize: '36px', textAlign: 'center' }}>Login</h1>
                     <div className='mb-3'>
-                        <label htmlFor="email">
+                        <label htmlFor="email" className='mb-2'>
                             Email:
                         </label>
                         <input type="email" placeholder="Enter email" name="email" 
@@ -47,13 +48,19 @@ function Login() {
                         {errors.email && <span className='text-danger'> {errors.email}</span>}
                     </div>
                     <div className='mb-3'>
-                        <label htmlFor="password">
+                        <label htmlFor="password" className='mb-2'>
                             Password:
                         </label>
                         <input type="password" placeholder="Enter Password" name="password"
                         onChange={handleInput} className='form-control rounded-0' required />
                         {errors.password && <span className='text-danger'> {errors.password}</span>}
                     </div>
+                    <div className='mb-3'>
+                            <div className='d-flex justify-content-between mb-2'>
+                                <label><input type='checkbox'/>Remember me</label>
+                                <Link to="" className='text-decoration-none text-danger'>Forgot password</Link>
+                            </div>
+                        </div>
                     <button type="submit" className='btn btn-success w-100'>Log in</button>
                     <p>You are agree to our terms and policies</p>
                     <Link to="/register" className='btn btn-default border w-100 text-decoration-none'>Create Account</Link>
