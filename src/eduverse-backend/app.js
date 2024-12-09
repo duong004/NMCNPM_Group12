@@ -7,6 +7,7 @@ const cors = require('cors');
 const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
+//const enrollmentRoutes = require('./routes/enrollmentRoutes');
 //const materialRoutes = require('./routes/materialRoutes');
 //const userRoutes = require('./routes/userRoutes');
 //const reportRoutes = require('./routes/reportRoutes');
@@ -28,6 +29,7 @@ app.use(express.json()); // Đây là dòng cần thiết
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
+//app.use('/api/enrollments', enrollmentRoutes);
 //app.use('/api/materials', materialRoutes);
 //app.use('/api/users', userRoutes);
 //app.use('/api/reports', reportRoutes);

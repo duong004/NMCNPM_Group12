@@ -1,73 +1,137 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import Validation from './RegisterValidation'
-import axios from 'axios'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Validation from './RegisterValidation';
+import axios from 'axios';
+import './Register.css';
 
-function Register() {
+const RegisterPage = () => {
     const [values, setValues] = useState({
         name: '',
         email: '',
+        confirmEmail: '',
         password: '',
-    })
-    const navigate  = useNavigate()
-    const [errors, setErrors] = useState({ })
+        termsAccepted: false,
+    });
+    const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
+
     const handleInput = (e) => {
-        setValues(prev => ({...prev, [e.target.name]: e.target.value}))
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const validationErrors = Validation(values)
-        setErrors(validationErrors)
+        const { name, value, type, checked } = e.target;
+        setValues(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
+    };
 
-        if (errors.name === "" && errors.email === "" && errors.password === "" ) {
-            axios.post('http://localhost:5000/api/auth/register', values)
-            .then(res => {
-                navigate('/login')
-            })
-            .catch(err => console.log(err))
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const validationErrors = Validation(values);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0 && values.email === values.confirmEmail) {
+            try {
+                const res = await axios.post('http://localhost:5000/api/auth/register', values);
+                if (res.data.message === "Đăng ký thành công") {
+                    navigate('/login');
+                } else {
+                    alert(res.data.message);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            if (values.email !== values.confirmEmail) {
+                alert('Email và Email xác nhận không khớp.');
+            }
+            console.log("Form contains errors", validationErrors);
         }
+    };
 
-        if (Object.keys(validationErrors).length !== 0) {
-            console.log("Form contains errors", validationErrors)
-        } 
-    }
     return (
-        <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
-            <div className='bg-white p-3 rounded w-25'>
-                <form action="" onSubmit ={handleSubmit}>
-                    <div className='mb-3'>
-                        <label htmlFor="name">
-                            name:
-                        </label>
-                        <input type="text" placeholder="Enter name" name="name" 
-                        onChange={handleInput} className='form-control rounded-0' required />
-                        {errors.name && <span className='text-danger'> {errors.name}</span>}
-
+        <div className="register-page">
+            <div className="register-box">
+                <h2>Đăng ký</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="input-group">
+                        <label htmlFor="name">Tên:</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            placeholder="Nhập tên của bạn"
+                            value={values.name} 
+                            onChange={handleInput} 
+                            required 
+                            className="form-control rounded-0"
+                        />
+                        {errors.name && <span className="text-danger">{errors.name}</span>}
                     </div>
-                    <div className='mb-3'>
-                        <label htmlFor="email">
-                            Email:
-                        </label>
-                        <input type="email" placeholder="Enter email" name="email" 
-                        onChange={handleInput} className='form-control rounded-0' required />
-                        {errors.email && <span className='text-danger'> {errors.email}</span>}
-
+                    <div className="input-group">
+                        <label htmlFor="email">Email:</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="Nhập email của bạn"
+                            value={values.email} 
+                            onChange={handleInput} 
+                            required 
+                            className="form-control rounded-0"
+                        />
+                        {errors.email && <span className="text-danger">{errors.email}</span>}
                     </div>
-                    <div className='mb-3'>
-                        <label htmlFor="password">
-                            Password:
-                        </label>
-                        <input type="password" placeholder="Enter Password" name="password" 
-                        onChange={handleInput} className='form-control rounded-0' required />
-                        {errors.password && <span className='text-danger'> {errors.password}</span>}
+                    <div className="input-group">
+                        <label htmlFor="confirmEmail">Nhập lại Email:</label>
+                        <input 
+                            type="email" 
+                            id="confirmEmail" 
+                            name="confirmEmail" 
+                            placeholder="Nhập lại email"
+                            value={values.confirmEmail} 
+                            onChange={handleInput} 
+                            required 
+                            className="form-control rounded-0"
+                        />
+                        {errors.confirmEmail && <span className="text-danger">{errors.confirmEmail}</span>}
                     </div>
-                    <button className='btn btn-success w-100' type="submit">Sign up</button>
-                    <p>You are agree to our terms and policies</p>
-                    <Link to="/login" className='btn btn-default border w-100 text-decoration-none'>Log In</Link>
+                    <div className="input-group">
+                        <label htmlFor="password">Mật khẩu:</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Mật khẩu có ít nhất 6 ký tự"
+                            value={values.password} 
+                            onChange={handleInput} 
+                            required 
+                            className="form-control rounded-0"
+                        />
+                        {errors.password && <span className="text-danger">{errors.password}</span>}
+                    </div>
+                    <div className="terms">
+                        <input 
+                            type="checkbox" 
+                            id="terms" 
+                            name="termsAccepted"
+                            checked={values.termsAccepted} 
+                            onChange={handleInput} 
+                        />
+                        <label htmlFor="terms">Tôi đồng ý với chính sách về quyền riêng tư và điều khoản dịch vụ</label>
+                    </div>
+                    <button 
+                        type="submit" 
+                        className={`register-button ${values.termsAccepted ? 'active' : 'disabled'}`} 
+                        disabled={!values.termsAccepted}
+                    >
+                        Đăng ký
+                    </button>
                 </form>
+                <div className="links">
+                    <p>Đã có tài khoản? <Link to="/login">Đăng nhập</Link></p>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Register
+export default RegisterPage;
