@@ -40,10 +40,10 @@ const LoginPage = () => {
     return (
         <div className="login-page">
             <div className="login-box">
-                <h2>Đăng nhập</h2>
+                <h2 className="login-heading">Đăng nhập</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label htmlFor="email">Email:</label>
+                    <div className="login-input-group">
+                        <label htmlFor="email" className="login-label">Email:</label>
                         <input 
                             type="email" 
                             id="email" 
@@ -51,12 +51,12 @@ const LoginPage = () => {
                             value={values.email} 
                             onChange={handleInput} 
                             required 
-                            className="form-control rounded-0"
+                            className="login-form-control rounded-0"
                         />
-                        {errors.email && <span className="text-danger">{errors.email}</span>}
+                        {errors.email && <span className="login-text-danger">{errors.email}</span>}
                     </div>
-                    <div className="input-group">
-                        <label htmlFor="password">Mật khẩu:</label>
+                    <div className="login-input-group">
+                        <label htmlFor="password" className="login-label">Mật khẩu:</label>
                         <input 
                             type="password" 
                             id="password" 
@@ -64,13 +64,13 @@ const LoginPage = () => {
                             value={values.password}
                             onChange={handleInput} 
                             required 
-                            className="form-control rounded-0"
+                            className="login-form-control rounded-0"
                         />
-                        {errors.password && <span className="text-danger">{errors.password}</span>}
+                        {errors.password && <span className="login-text-danger">{errors.password}</span>}
                     </div>
                     <button type="submit" className="login-button">Đăng nhập</button>
                 </form>
-                <div className="links">
+                <div className="login-links">
                     <p>Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link></p>
                     <p><Link to="/forgot-password">Quên mật khẩu?</Link></p>
                 </div>

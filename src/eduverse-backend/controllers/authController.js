@@ -101,9 +101,9 @@ exports.forgotPassword = async (req, res) => {
             }
             const user = data[0];
             const token = jwt.sign({ id: user.user_id }, 'secret', { expiresIn: '1h' });
-            const resetLink = `http://yourdomain.com/reset-password/${token}`;
+            const resetLink = `http://localhost:3000/reset-password/${token}`;
             await sendEmail(user.email, 'Reset Password', 'forgotPasswordTemplate', { RESET_LINK: resetLink });
-            return res.json({ message: 'Reset link sent to your email' });
+            return res.json({ message: 'Đã gửi liên kết đặt lại mật khẩu đến email của bạn' });
         });
     } catch (error) {
         return res.status(500).json({ message: "Lỗi server" });

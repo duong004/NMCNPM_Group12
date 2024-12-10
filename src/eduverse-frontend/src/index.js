@@ -2,13 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
+import { AuthProvider } from './contexts/AuthContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider> {/* Bao bọc Web bằng AuthProvider */}
+      <App />
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
+
 
 
 
