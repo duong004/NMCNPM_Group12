@@ -11,26 +11,26 @@ const Footer = () => {
             <div className="footer-content">
                 <div className="footer-column left-column">
                     <img src={logo} alt="EduVerse Logo" className="footer-logo" />
-                    <h2>EduVerse</h2>
+                    <h2 className="footer-heading">EduVerse</h2>
                     <p><FaPhone /> Số điện thoại: 0123 456 789</p>
                     <p><FaEnvelope /> Email: info@eduverse.com</p>
                     <p><FaFacebook /> Facebook: facebook.com/eduverse</p>
                     <p><FaTwitter /> Twitter: twitter.com/eduverse</p>
                 </div>
                 <div className="footer-column middle-column">
-                    <h3>Đại học ABCDEF</h3>
-                    <p>Số 1, Đường RTYUIOP, phường POILKGBN, quận MVBDNDM, Thành phố JNFJBF</p>
+                    <h3 className="footer-heading">Đại học Bách Khoa Hà Nội</h3>
+                    <p>Số 1, Đường Đại Cồ Việt, phường Bách Khoa, quận Hai Bà Trưng, <br /> Thành phố Hà Nội</p>
                 </div>
                 <div className="footer-column right-column">
-                    <div className="right-subcolumn">
-                        <h4>Thông tin</h4>
+                    <div className="footer-right-subcolumn">
+                        <h4 className="footer-heading">Thông tin</h4>
                         <p>Quy định chung</p>
                         <p>Hướng dẫn</p>
                         <p>Các chính sách</p>
                         <p>Tin tức</p>
                     </div>
-                    <div className="right-subcolumn">
-                        <h4>Liên kết</h4>
+                    <div className="footer-right-subcolumn">
+                        <h4 className="footer-heading">Liên kết</h4>
                         <Link to="/home">Trang chủ</Link>
                         <Link to="/contact">Liên hệ</Link>
                         <Link to="/info">Thông tin hàng hóa</Link>
@@ -39,13 +39,13 @@ const Footer = () => {
                 </div>
             </div>
             <div className="footer-bottom">
-                <p className="small-text">Built by Group 12.</p>
-                <p className="small-text">Powered by ABCD.</p>
+                <p className="footer-small-text">Built by Group 12.</p>
+                <p className="footer-small-text">Powered by ABCD.</p>
                 <p>&nbsp;</p> {/* Dòng trống */}
-                <p className="small-text">©Copyright 2024 EduVerse. All rights reserved.</p>
-                <div className="organizer">
+                <p className="footer-small-text">©Copyright 2024 EduVerse. All rights reserved.</p>
+                <div className="footer-organizer">
                     <p>Đơn vị tổ chức</p>
-                    <img src={orgLogo} alt="Organizer Logo" className="org-logo" />
+                    <img src={orgLogo} alt="Organizer Logo" className="footer-org-logo" />
                 </div>
             </div>
         </footer>
