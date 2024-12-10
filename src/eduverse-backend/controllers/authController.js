@@ -14,17 +14,19 @@ const generateUserId = (userCount) => {
 // Đăng ký người dùng mới
 exports.register = async (req, res) => {
     const { name, email, password, role } = req.body;
+    console.log(req.body)
     try {
         // Kiểm tra xem email đã tồn tại chưa
         const checkEmailSql = 'SELECT * FROM users WHERE `email` = ?';
         db.query(checkEmailSql, [email], async (err, data) => {
             if (err) {
+                
                 return res.status(500).json({ message: "Lỗi server" });
             }
             if (data.length > 0) {
                 return res.status(400).json({ message: "Email đã tồn tại" });
             }
-
+       
             // Đếm số lượng người dùng hiện có để tạo user_id
             const countUsersSql = 'SELECT COUNT(*) as count FROM users';
             db.query(countUsersSql, async (countErr, countData) => {
@@ -33,9 +35,9 @@ exports.register = async (req, res) => {
                 }
                 const userId = generateUserId(countData[0].count);
                 const hashedPassword = await bcrypt.hash(password, 10);
-                const insertSql = 'INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `role`) VALUES (?, ?, ?, ?, ?)';
+                const insertSql = 'INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `role`) VALUES (?)';
                 const values = [userId, name, email, hashedPassword, role || 'Học viên'];
-                db.query(insertSql, values, (insertErr, insertData) => {
+                db.query(insertSql, [values], (insertErr, insertData) => {
                     if (insertErr) {
                         return res.status(500).json({ message: "Lỗi server" });
                     }
@@ -66,7 +68,14 @@ exports.login = async (req, res) => {
                 return res.status(400).json({ message: "Mật khẩu không đúng" });
             }
             const token = jwt.sign({ id: user.user_id }, 'secret', { expiresIn: '1h' });
-            return res.status(200).json({ message: "Đăng nhập thành công", token });
+            // Cập nhật last_login
+            const updateLastLoginSql = 'UPDATE users SET last_login = ? WHERE user_id = ?';
+            db.query(updateLastLoginSql, [new Date(), user.user_id], (updateErr) => {
+                if (updateErr) {
+                    return res.status(500).json({ message: "Lỗi server khi cập nhật thông tin đăng nhập" });
+                }
+                return res.status(200).json({ message: "Đăng nhập thành công", token });
+            });
         });
     } catch (error) {
         return res.status(500).json({ message: "Lỗi server" });

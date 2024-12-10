@@ -1,4 +1,31 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import CoursesListPage from './pages/CoursesListPage';
+import LoginPage from './components/Auth/Login';
+import RegisterPage from './components/Auth/Register';
+//import NotFoundPage from './pages/NotFoundPage';
+import './App.css';
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/list" element={<CoursesListPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
+
+
+/*
+import React from 'react';
 import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import CoursesPage from './pages/CoursesPage';
@@ -21,9 +48,11 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/register' element={<Register />}></Route>
+        <Route path='/homepage' element={<HomePage />}></Route>
       </Routes>
     </BrowserRouter>
   );
 }
 
-export default App;
+export default App;*/
+

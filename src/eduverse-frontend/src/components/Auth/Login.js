@@ -1,65 +1,82 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import Validation from './LoginValidation'
-import axios from 'axios'
-function Login() {
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Validation from './LoginValidation';
+import axios from 'axios';
+import './Login.css';
+
+const LoginPage = () => {
     const [values, setValues] = useState({
         email: '',
         password: '',
-    })
-    const navigate = useNavigate()
-    const [errors, setErrors] = useState({ })
+    });
+    const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
+
     const handleInput = (e) => {
-        setValues(prev => ({...prev, [e.target.name]: e.target.value}))
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const validationErrors = Validation(values)
-        setErrors(validationErrors)
+        setValues(prev => ({...prev, [e.target.name]: e.target.value}));
+    };
 
-        if (errors.email === "" && errors.password === "" ) {
-            axios.post('http://localhost:5000/login', values)
-            .then(res => {
-                if (res.data === "success") {
-                    navigate('/home')
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const validationErrors = Validation(values);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0) {
+            try {
+                const res = await axios.post('http://localhost:5000/api/auth/login', values);
+                if (res.data.message === "Đăng nhập thành công") {
+                    navigate('/home');
                 } else {
-                    alert("Sai tên đăng nhập hoặc mật khẩu: " + res.data)
+                    alert(res.data.message);
                 }
-            })
-            .catch(err => console.log(err))
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            console.log("Form contains errors", validationErrors);
         }
+    };
 
-        if (Object.keys(validationErrors).length !== 0) {
-            console.log("Form contains errors", validationErrors)
-        } 
-    }
     return (
-        <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
-            <div className='bg-white p-3 rounded w-25'>
-                <form action="" onSubmit={handleSubmit}>
-                    <div className='mb-3'>
-                        <label htmlFor="email">
-                            Email:
-                        </label>
-                        <input type="email" placeholder="Enter email" name="email" 
-                        onChange={handleInput} className='form-control rounded-0' required />
-                        {errors.email && <span className='text-danger'> {errors.email}</span>}
+        <div className="login-page">
+            <div className="login-box">
+                <h2>Đăng nhập</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="input-group">
+                        <label htmlFor="email">Email:</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email"
+                            value={values.email} 
+                            onChange={handleInput} 
+                            required 
+                            className="form-control rounded-0"
+                        />
+                        {errors.email && <span className="text-danger">{errors.email}</span>}
                     </div>
-                    <div className='mb-3'>
-                        <label htmlFor="password">
-                            Password:
-                        </label>
-                        <input type="password" placeholder="Enter Password" name="password"
-                        onChange={handleInput} className='form-control rounded-0' required />
-                        {errors.password && <span className='text-danger'> {errors.password}</span>}
+                    <div className="input-group">
+                        <label htmlFor="password">Mật khẩu:</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            value={values.password}
+                            onChange={handleInput} 
+                            required 
+                            className="form-control rounded-0"
+                        />
+                        {errors.password && <span className="text-danger">{errors.password}</span>}
                     </div>
-                    <button type="submit" className='btn btn-success w-100'>Log in</button>
-                    <p>You are agree to our terms and policies</p>
-                    <Link to="/register" className='btn btn-default border w-100 text-decoration-none'>Create Account</Link>
+                    <button type="submit" className="login-button">Đăng nhập</button>
                 </form>
+                <div className="links">
+                    <p>Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link></p>
+                    <p><Link to="/forgot-password">Quên mật khẩu?</Link></p>
+                </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Login
+export default LoginPage;
