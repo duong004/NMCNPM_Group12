@@ -30,7 +30,7 @@ app.use(express.json()); // Đây là dòng cần thiết
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
-//app.use('/api/materials', materialRoutes);
+//app.use('/api/materials', materialRoutes);  
 //app.use('/api/users', userRoutes);
 //app.use('/api/reports', reportRoutes);
 //app.use('/api/lessons', lessonRoutes);
