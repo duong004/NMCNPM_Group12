@@ -5,36 +5,87 @@ import './CourseList.css';
 import defaultImg from '../../assets/images/cover-eduverse.jpg';
 
 const CourseList = () => {
-    const [courses, setCourses] = useState([]); // State để lưu danh sách khóa học
-    const [currentPage, setCurrentPage] = useState(1); // State để lưu trang hiện tại
-    const itemsPerPage = 6; // Số lượng khóa học trên mỗi trang
+    const [courses, setCourses] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
 
-    // Gọi API khi component được render
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/courses/list'); // Gọi API bằng axios
-                setCourses(response.data); // Lưu dữ liệu vào state
+                const response = await axios.get('http://localhost:5000/api/courses/list');
+                setCourses(response.data);
             } catch (error) {
                 console.error('Lỗi khi lấy dữ liệu:', error);
             }
         };
-
-        fetchCourses(); // Gọi hàm lấy dữ liệu
+        fetchCourses();
     }, []);
 
-    // Tính toán danh sách khóa học cần hiển thị trên trang hiện tại
+    const totalPages = Math.ceil(courses.length / itemsPerPage);
+
+    const paginate = (page) => {
+        setCurrentPage(page);
+    };
+
+    const renderPageNumbers = () => {
+        const pages = [];
+        const pageRange = 1; // Số trang trước và sau trang hiện tại được hiển thị
+    
+        // Hiển thị các trang đầu và "..."
+        if (currentPage > 4) {
+            pages.push(
+                <button key={1} className={`page-btn ${currentPage === 1 ? 'active' : ''}`} onClick={() => paginate(1)}>
+                    1
+                </button>
+            );
+            pages.push(<span key="dots-start" className="dots">...</span>);
+        } else {
+            for (let i = 1; i <= Math.min(3, totalPages); i++) {
+                pages.push(
+                    <button key={i} className={`page-btn ${currentPage === i ? 'active' : ''}`} onClick={() => paginate(i)}>
+                        {i}
+                    </button>
+                );
+            }
+        }
+    
+        // Hiển thị các trang gần trang hiện tại
+        for (let i = Math.max(4, currentPage - pageRange); i <= Math.min(totalPages - 3, currentPage + pageRange); i++) {
+            pages.push(
+                <button key={i} className={`page-btn ${currentPage === i ? 'active' : ''}`} onClick={() => paginate(i)}>
+                    {i}
+                </button>
+            );
+        }
+    
+        // Hiển thị "..." và các trang cuối
+        if (currentPage < totalPages - 3) {
+            pages.push(<span key="dots-end" className="dots">...</span>);
+            for (let i = totalPages; i <= totalPages; i++) {
+                pages.push(
+                    <button key={i} className={`page-btn ${currentPage === i ? 'active' : ''}`} onClick={() => paginate(i)}>
+                        {i}
+                    </button>
+                );
+            }
+        } else {
+            for (let i = Math.max(4, totalPages - 2); i <= totalPages; i++) {
+                pages.push(
+                    <button key={i} className={`page-btn ${currentPage === i ? 'active' : ''}`} onClick={() => paginate(i)}>
+                        {i}
+                    </button>
+                );
+            }
+        }
+    
+        return pages;
+    };
+    
+    
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentCourses = courses.slice(indexOfFirstItem, indexOfLastItem);
-
-    // Tính tổng số trang
-    const totalPages = Math.ceil(courses.length / itemsPerPage);
-
-    // Hàm thay đổi trang
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
 
     return (
         <section className='course-list'>
@@ -59,17 +110,22 @@ const CourseList = () => {
                 ))}
             </div>
 
-            {/* Phân trang */}
             <div className="pagination">
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
-                        className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
+                <button
+                    className="page-btn"
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    &lt;
+                </button>
+                {renderPageNumbers()}
+                <button
+                    className="page-btn"
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                >
+                    &gt;
+                </button>
             </div>
         </section>
     );
