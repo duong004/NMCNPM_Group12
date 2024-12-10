@@ -21,7 +21,7 @@ app.use(express.json()); // Đây là dòng cần thiết
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
-//app.use('/api/materials', materialRoutes);
+//app.use('/api/materials', materialRoutes);  
 //app.use('/api/users', userRoutes);
 //app.use('/api/reports', reportRoutes);
 
