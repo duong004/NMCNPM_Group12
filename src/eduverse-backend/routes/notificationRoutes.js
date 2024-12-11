@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const notificationController = require('../controllers/notificationController');
+const { authenticate } = require('../middlewares/authMiddleware'); 
 
-router.post('/create', notificationController.createNotification);
-router.get('/:user_id', notificationController.getNotifications);
-router.put('/mark-as-read/:notification_id', notificationController.markAsRead);
-router.delete('/delete/:notification_id', notificationController.deleteNotification);
-// Các route khác như delete...
+// Gửi thông báo (Gọi từ các controller khác)
+// router.post('/send-notification', authenticate, notificationController.sendNotification); // Nếu cần endpoint riêng
+
+router.put('/notifications/:notification_id/read', authenticate, notificationController.markAsRead);
+router.get('/notifications', authenticate, notificationController.getUserNotifications);
 
 module.exports = router;
