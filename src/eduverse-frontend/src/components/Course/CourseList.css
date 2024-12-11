@@ -85,7 +85,7 @@
     width: 80px;
 }
 
-/* .btn {
+.btn {
     display: inline-block;
     padding: 10px 15px;
     font-size: 14px;
@@ -99,7 +99,7 @@
 
 .btn:hover {
     background-color: #0056b3;
-} */
+} 
 
 /* Responsive cho màn hình nhỏ */
 @media (max-width: 768px) {
