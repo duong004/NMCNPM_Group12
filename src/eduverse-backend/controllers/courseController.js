@@ -1,4 +1,5 @@
 const db = require('../config/db');
+//const notificationController = require('./notificationController');
 
 // Hàm tạo course_id theo cấu trúc C + số thứ tự
 const generateCourseId = (courseCount) => {
@@ -24,6 +25,7 @@ exports.createCourse = (req, res) => {
         const courseId = generateCourseId(countData[0].count);
         const insertSql = 'INSERT INTO courses (course_id, title, description, teacher_id, price, duration, category, cover_image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const values = [courseId, title, description, teacher_id, price, duration, category, cover_image || 'http://example.com/coverimage.jpg', status || 'Đang hoạt động'];
+        //await notificationController.sendNotification(teacher_id, `Khóa học "${title}" đã được tạo thành công.`);
         db.query(insertSql, values, (insertErr, result) => {
             if (insertErr) {
                 return res.status(500).json({ message: "Lỗi server" });
