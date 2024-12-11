@@ -87,6 +87,7 @@
 
 .btn {
     display: inline-block;
+    text-align: center;
     padding: 10px 15px;
     font-size: 14px;
     font-weight: bold;
@@ -98,8 +99,8 @@
 }
 
 .btn:hover {
-    background-color: #0056b3;
-} 
+    background-color: #5A2D8A;
+}
 
 /* Responsive cho màn hình nhỏ */
 @media (max-width: 768px) {
@@ -157,6 +158,19 @@
     background-color: purple;
     color: #fff;
     border-color: purple;
+}
+
+.page-btn:disabled {
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+    color: #aaa;
+}
+
+.dots {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #666;
+    pointer-events: none;
 }
 
 /* Course Grid Styles */
