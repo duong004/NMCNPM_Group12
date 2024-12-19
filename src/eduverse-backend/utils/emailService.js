@@ -29,30 +29,27 @@ const sendEmail = async (to, subject, template, context) => {
 module.exports = { sendEmail };*/
 
 
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-    service: 'Gmail', // Hoặc dịch vụ email khác
-    auth: {
-        user: 'your-email@gmail.com',
-        pass: 'your-email-password'
-    }
-});
+const transporter = require('../config/emailConfig');
 
 const sendEmail = async (to, subject, template, context) => {
-    const mailOptions = {
-        from: 'your-email@gmail.com',
-        to: to,
-        subject: subject,
-        html: getTemplate(template, context)
-    };
-
-    await transporter.sendMail(mailOptions);
+    try {
+        const htmlTemplate = getTemplate(template, context); // Hàm này tạo template HTML từ file template
+        const mailOptions = {
+            from: 'your-email@gmail.com',
+            to,
+            subject,
+            html: htmlTemplate
+        };
+        await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error('Lỗi khi gửi email: ', error);
+        throw new Error('Không thể gửi email');
+    }
 };
 
-const getTemplate = (template, context) => {
-    // Logic để lấy template và thay thế các biến trong context
-    // Ví dụ: return compiledTemplateString;
+const getTemplate = (templateName, context) => {
+    // Ví dụ về việc lấy template HTML từ file. Bạn có thể sử dụng các thư viện template như Handlebars.
+    return `<html><body>${context.RESET_LINK}</body></html>`;
 };
 
-module.exports = { sendEmail };
+module.exports = sendEmail;
