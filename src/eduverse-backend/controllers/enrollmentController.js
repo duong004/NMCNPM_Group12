@@ -17,6 +17,7 @@ exports.createEnrollment = async (userId, courseId) => {
     const insertSql = 'INSERT INTO enrollments (enrollment_id, student_id, course_id, enrolled_at, status) VALUES (?, ?, ?, DEFAULT, DEFAULT)';
     const values = [enrollmentId, userId, courseId];
     await query(insertSql, values);
+    //await notificationController.sendNotification(userId, 'Đăng ký khóa học thành công', 'courseRegistrationTemplate', { COURSE_TITLE: courseTitle });
 
     return enrollmentId;
 };

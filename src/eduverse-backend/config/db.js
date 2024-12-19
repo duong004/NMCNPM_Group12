@@ -1,6 +1,5 @@
 // Tệp cấu hình kết nối cơ sở dữ liệu.
 
-require('dotenv').config();
 const mysql = require('mysql2');
 
 console.log('DB_HOST:', process.env.DB_HOST);
