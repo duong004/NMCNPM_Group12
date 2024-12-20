@@ -1,8 +1,6 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-console.log(process.env.EMAIL_PASSWORD);
-
 // Cấu hình transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -15,7 +13,7 @@ const transporter = nodemailer.createTransport({
 // Test gửi mail
 /*const mailOptions = {
     from: process.env.EMAIL_USER,     // Địa chỉ email người gửi
-    to: 'dungkhi19@gmail.com',       // Địa chỉ email người nhận
+    to: 'dapip55750@evusd.com',       // Địa chỉ email người nhận
     subject: 'Test Email',             // Chủ đề email
     text: 'This is a test email sent using Nodemailer.'  // Nội dung email dạng văn bản
     // Bạn cũng có thể gửi email dạng HTML bằng cách thêm trường 'html'

@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaExclamationCircle } from 'react-icons/fa';
 import './ForgotPassword.css';
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
-          const response = await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
-          setMessage(response.data.message);
-      } catch (error) {
-          setMessage('Đã có lỗi xảy ra. Vui lòng thử lại.');
-      }
+            const response = await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
+            if (response.data.message === 'Đã gửi liên kết đặt lại mật khẩu đến email của bạn') {
+                navigate('/password-reset-sent');
+            } else {
+                setError('Vui lòng kiểm tra lại email');
+            }
+        } catch (error) {
+            setError('Vui lòng kiểm tra lại email');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -33,7 +43,15 @@ const ForgotPasswordPage = () => {
                             required 
                         />
                     </div>
-                    <button type="submit" className="forgot-password-reset-button">Gửi liên kết đặt lại mật khẩu</button>
+                    {error && (
+                        <div className="forgot-password-error-message">
+                            <FaExclamationCircle className="forgot-password-warning-icon" />
+                            <span>{error}</span>
+                        </div>
+                    )}
+                    <button type="submit" className="forgot-password-reset-button" disabled={isLoading}>
+                        {isLoading ? 'Đang gửi...' : 'Gửi liên kết đặt lại mật khẩu'}
+                    </button>
                 </form>
                 <div className="forgot-password-links">
                     <p className="forgot-password-para"><Link to="/login">Quay lại đăng nhập</Link></p>

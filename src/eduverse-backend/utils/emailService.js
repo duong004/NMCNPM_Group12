@@ -1,55 +1,34 @@
-// Tiện ích xử lý gửi email.
-
-/*const nodemailer = require('nodemailer');
-
-const sendEmail = async (to, subject, template, context) => {
-    const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'your-email@gmail.com',
-            pass: 'your-email-password'
-        }
-    });
-
-    const mailOptions = {
-        from: 'your-email@gmail.com',
-        to: to,
-        subject: subject,
-        text: `Click vào liên kết để đặt lại mật khẩu: ${context.RESET_LINK}`
-    };
-
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Email sent');
-    } catch (error) {
-        console.error('Error sending email:', error);
-    }
-};
-
-module.exports = { sendEmail };*/
-
-
+const fs = require('fs');
+const path = require('path');
 const transporter = require('../config/emailConfig');
 
-const sendEmail = async (to, subject, template, context) => {
+const sendEmail = async (to, subject, templateName, context) => {
     try {
-        const htmlTemplate = getTemplate(template, context); // Hàm này tạo template HTML từ file template
+        const htmlTemplate = await generateHtmlTemplate(templateName, context);
         const mailOptions = {
-            from: 'your-email@gmail.com',
+            from: process.env.EMAIL_USER,
             to,
             subject,
             html: htmlTemplate
         };
         await transporter.sendMail(mailOptions);
+        console.log('Email đã được gửi thành công!');
     } catch (error) {
-        console.error('Lỗi khi gửi email: ', error);
+        console.error('Lỗi khi gửi email: ', error.message);
         throw new Error('Không thể gửi email');
     }
 };
 
-const getTemplate = (templateName, context) => {
-    // Ví dụ về việc lấy template HTML từ file. Bạn có thể sử dụng các thư viện template như Handlebars.
-    return `<html><body>${context.RESET_LINK}</body></html>`;
+const generateHtmlTemplate = async (templateName, context) => {
+    const filePath = path.join(__dirname, '..', 'views', 'emails', `${templateName}.html`);
+    let source = fs.readFileSync(filePath, 'utf8');
+    
+    // Thay thế các placeholder trong template bằng giá trị thực tế
+    Object.keys(context).forEach(key => {
+        source = source.replace(new RegExp(`{{${key}}}`, 'g'), context[key]);
+    });
+
+    return source;
 };
 
 module.exports = sendEmail;
