@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaExclamationCircle } from 'react-icons/fa'; // Thêm biểu tượng cảnh báo
 import './ResetPassword.css';
 
 const ResetPasswordPage = () => {
@@ -20,8 +21,8 @@ const ResetPasswordPage = () => {
         try {
             const response = await axios.post(`http://localhost:5000/api/auth/reset-password/${token}`, { password: newPassword });
             setMessage(response.data.message);
-            if (response.data.message === "Password reset successful") {
-                navigate('/login');
+            if (response.data.message === "Đặt lại mật khẩu thành công") {
+                navigate('/password-reset-success');
             }
         } catch (error) {
             setMessage('Đã có lỗi xảy ra. Vui lòng thử lại.');
@@ -33,7 +34,12 @@ const ResetPasswordPage = () => {
             <div className="reset-password-box">
                 <h2 className="reset-password-heading">Đặt Lại Mật Khẩu</h2>
                 <p className="reset-password-para">Nhập mật khẩu mới của bạn.</p>
-                {message && <p className="reset-password-para">{message}</p>}
+                {message && (
+                    <div className="reset-password-message">
+                        <FaExclamationCircle className="reset-password-warning-icon" />
+                        <span>{message}</span>
+                    </div>
+                )}
                 <form onSubmit={handleSubmit}>
                     <div className="reset-password-input-group">
                         <input 

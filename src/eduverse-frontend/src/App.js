@@ -5,7 +5,9 @@ import CoursesListPage from './pages/CoursesListPage';
 import LoginPage from './components/Auth/Login';
 import RegisterPage from './components/Auth/Register';
 import ForgotPassword from './components/Auth/ForgotPassword';
+import PasswordResetSentPage from './components/Auth/PasswordResetSent';
 import ResetPassword from './components/Auth/ResetPassword';
+import PasswordResetSuccessPage from './components/Auth/PasswordResetSuccess';
 import NotFoundPage from './pages/NotFoundPage';
 import MaintenancePage from './pages/MaintenancePage';
 import './App.css';
@@ -19,7 +21,9 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/password-reset-sent" element={<PasswordResetSentPage />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/password-reset-success" element={<PasswordResetSuccessPage />} />
         <Route path="/404" element={<NotFoundPage />} />
         <Route path="/offline" element={<MaintenancePage />} />
       </Routes>
