@@ -94,22 +94,35 @@ exports.forgotPassword = async (req, res) => {
         const sql = 'SELECT * FROM users WHERE email = ?';
         db.query(sql, [email], async (err, data) => {
             if (err) {
+                console.error('Error querying the database:', err);
                 return res.status(500).json({ message: "Lỗi server" });
             }
             if (data.length === 0) {
                 return res.status(404).json({ message: "Người dùng không tồn tại" });
+                //return res.status(200).json({ message: 'Nếu email tồn tại trong hệ thống, bạn sẽ nhận được liên kết đặt lại mật khẩu.' });
             }
             const user = data[0];
             const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
             const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-            await sendEmail(user.email, 'Đặt lại mật khẩu', 'forgotPasswordTemplate', { RESET_LINK: resetLink });
-            return res.json({ message: 'Đã gửi liên kết đặt lại mật khẩu đến email của bạn' });
+            
+            // Lưu token vào cơ sở dữ liệu
+            const updateTokenSql = 'UPDATE users SET token_reset = ? WHERE user_id = ?';
+            db.query(updateTokenSql, [token, user.user_id], async (updateErr) => {
+                if (updateErr) {
+                    console.error('Error updating the database:', updateErr);
+                    return res.status(500).json({ message: "Lỗi server" });
+                }
+                await sendEmail(user.email, 'Đặt lại mật khẩu', 'forgotPasswordTemplate', { RESET_LINK: resetLink });
+                return res.json({ message: 'Đã gửi liên kết đặt lại mật khẩu đến email của bạn' });
+                //return res.json({ message: 'Nếu email tồn tại trong hệ thống, bạn sẽ nhận được liên kết đặt lại mật khẩu.' });
+            });
         });
     } catch (error) {
         console.error('Lỗi khi quên mật khẩu:', error.message);
         return res.status(500).json({ message: "Lỗi server" });
     }
 };
+
 
 // Đặt lại mật khẩu
 exports.resetPassword = async (req, res) => {
@@ -129,13 +142,13 @@ exports.resetPassword = async (req, res) => {
                 //return res.status(500).json({ message: "Lỗi server" });
                 return res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại." });
             }
-            if (data.length === 0) {
+            if (data.length === 0 || data[0].token_reset !== token) {
                 //return res.status(404).json({ message: "Người dùng không tồn tại" });
                 return res.status(400).json({ message: 'Yêu cầu không hợp lệ.' });
             }
             const user = data[0];
             const hashedPassword = await bcrypt.hash(password, 10);
-            const updateSql = 'UPDATE users SET password = ? WHERE user_id = ?';
+            const updateSql = 'UPDATE users SET password = ?, token_reset = NULL WHERE user_id = ?';
             db.query(updateSql, [hashedPassword, user.user_id], async (updateErr) => {
                 if (updateErr) {
                     console.error('Error updating the database:', updateErr);
