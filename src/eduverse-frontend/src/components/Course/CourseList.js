@@ -103,8 +103,11 @@ const CourseList = () => {
                             <p>{course.description}</p>
                         </div>
                         <div className="card-footer">
-                            <span className="price">Gia: {course.price} &</span>
-                            <Link to="/" className="btn">Học Ngay</Link>
+                            <span className="price">Giá: {course.price} $</span>
+                            <Link to={{
+                                pathname: `/lesson/${course.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`, 
+                                search: `?course_id=${course.course_id}`
+                            }} className="btn">Học Ngay</Link>
                         </div>
                     </div>
                 ))}
