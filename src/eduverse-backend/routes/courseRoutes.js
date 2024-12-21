@@ -12,6 +12,7 @@ const courseController = require('../controllers/courseController');
 // router.delete('/:id', authMiddleware.authenticate, courseController.deleteCourse);
 
 router.post('/create', courseController.createCourse);
+router.get('/me/list', courseController.listMeCourses);
 router.get('/list', courseController.listCourses);
 router.get('/:id', courseController.getCourseById);
 router.put('/:id', courseController.updateCourse);

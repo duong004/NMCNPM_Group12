@@ -3,6 +3,7 @@ const cloudinary = require('../config/cloudinaryConfig');
 const { promisify } = require('util');
 const query = promisify(db.query).bind(db);
 const fs = require('fs');
+const Material = require('../models/Material');
 
 // Hàm tạo material_id theo cấu trúc M + số thứ tự
 const generateMaterialId = (materialCount) => {
@@ -11,83 +12,105 @@ const generateMaterialId = (materialCount) => {
 };
 
 // Thêm tài liệu (Chỉ 'Giáo viên' làm chủ khóa học có chứa bài học này mới được thêm tài liệu)
+// exports.createMaterial = async (req, res) => {
+//     try {
+//         const { lesson_id, title, type } = req.body;
+//         const userId = req.user.user_id;
+//         const userRole = req.user.role;
+//         const file = req.file.path;
+
+//         // Kiểm tra xem người dùng có phải là chủ khóa học không
+//         const checkLessonSql = `
+//             SELECT l.course_id, c.teacher_id
+//             FROM lessons l
+//             JOIN courses c ON l.course_id = c.course_id
+//             WHERE l.lesson_id = ? AND c.teacher_id = ?`;
+//         const lessonData = await query(checkLessonSql, [lesson_id, userId]);
+
+//         if (lessonData.length === 0) {
+//             fs.unlinkSync(file);
+//             return res.status(403).json({ message: "Chỉ chủ khóa học mới có thể thêm tài liệu" });
+//         }
+
+//         // Tải lên file lên Cloudinary
+//         const result = await cloudinary.uploader.upload(file, {
+//             resource_type: type === 'Video' ? 'video' : 'auto',
+//             folder: 'eduverse/materials'
+//         });
+
+//         // Xóa file sau khi upload
+//         fs.unlinkSync(file);
+
+//         // Đếm số lượng tài liệu hiện có để tạo material_id
+//         const countMaterialsSql = 'SELECT COUNT(*) as count FROM materials';
+//         const countData = await query(countMaterialsSql);
+//         const materialId = generateMaterialId(countData[0].count);
+
+//         const insertSql = 'INSERT INTO materials (material_id, lesson_id, title, type, content_url, uploaded_at) VALUES (?, ?, ?, ?, ?, DEFAULT)';
+//         const values = [materialId, lesson_id, title, type, result.secure_url];
+//         await query(insertSql, values);
+
+//         return res.status(201).json({ message: "Tài liệu đã được tạo", materialId });
+//     } catch (error) {
+//         if (req.file) fs.unlinkSync(req.file.path); // Xóa file nếu có lỗi
+//         return res.status(500).json({ message: "Lỗi server", error: error.message });
+//     }
+// };
+
 exports.createMaterial = async (req, res) => {
-    try {
-        const { lesson_id, title, type } = req.body;
-        const userId = req.user.user_id;
-        const userRole = req.user.role;
-        const file = req.file.path;
-
-        // Kiểm tra xem người dùng có phải là chủ khóa học không
-        const checkLessonSql = `
-            SELECT l.course_id, c.teacher_id
-            FROM lessons l
-            JOIN courses c ON l.course_id = c.course_id
-            WHERE l.lesson_id = ? AND c.teacher_id = ?`;
-        const lessonData = await query(checkLessonSql, [lesson_id, userId]);
-
-        if (lessonData.length === 0) {
-            fs.unlinkSync(file);
-            return res.status(403).json({ message: "Chỉ chủ khóa học mới có thể thêm tài liệu" });
+    const { lesson_id, title, type, content_url } = req.body;
+    const countMaterialSql = 'SELECT COUNT(*) as count FROM materials';
+    db.query(countMaterialSql, async (err, result) => {
+        if (err) {
+        return res.status(500).json({ message: 'Lỗi server' });
         }
+        const materialId = generateMaterialId (result[0].count);
+        const insertSql = `INSERT INTO materials (material_id, lesson_id, title, type, content_url, uploaded_at) VALUES (?,?,?,?,?,?)`;
+        const uploaded_at = new Date();
 
-        // Tải lên file lên Cloudinary
-        const result = await cloudinary.uploader.upload(file, {
-            resource_type: type === 'Video' ? 'video' : 'auto',
-            folder: 'eduverse/materials'
-        });
-
-        // Xóa file sau khi upload
-        fs.unlinkSync(file);
-
-        // Đếm số lượng tài liệu hiện có để tạo material_id
-        const countMaterialsSql = 'SELECT COUNT(*) as count FROM materials';
-        const countData = await query(countMaterialsSql);
-        const materialId = generateMaterialId(countData[0].count);
-
-        const insertSql = 'INSERT INTO materials (material_id, lesson_id, title, type, content_url, uploaded_at) VALUES (?, ?, ?, ?, ?, DEFAULT)';
-        const values = [materialId, lesson_id, title, type, result.secure_url];
-        await query(insertSql, values);
-
+        const values = [materialId, lesson_id, title, type, content_url, uploaded_at];
+        db.query(insertSql, values, (insertErr, result) => {
+        if (insertErr) {
+            return res.status(500).json({ message: "Lỗi server" });
+        }
         return res.status(201).json({ message: "Tài liệu đã được tạo", materialId });
-    } catch (error) {
-        if (req.file) fs.unlinkSync(req.file.path); // Xóa file nếu có lỗi
-        return res.status(500).json({ message: "Lỗi server", error: error.message });
-    }
+        })
+    });
 };
 
 // Hiển thị tài liệu của một bài học (Giáo viên chỉ xem tài liệu trong khóa học của bản thân, Quản trị viên xem tất cả tài liệu, học viên đã đăng ký mới được xem tài liệu)
 exports.getMaterialsByLesson = async (req, res) => {
   try {
-      const { lesson_id } = req.params;
-      const userId = req.user.user_id;
-      const userRole = req.user.role;
+    //   const { lesson_id } = req.params;
+    //   const userId = req.user.user_id;
+    //   const userRole = req.user.role;
 
-      let sql;
-      let values;
-      if (userRole === 'Quản trị viên') {
-          sql = 'SELECT * FROM materials WHERE lesson_id = ?';
-          values = [lesson_id];
-      } else if (userRole === 'Giáo viên') {
-          sql = `
-              SELECT m.*
-              FROM materials m
-              JOIN lessons l ON m.lesson_id = l.lesson_id
-              JOIN courses c ON l.course_id = c.course_id
-              WHERE m.lesson_id = ? AND c.teacher_id = ?`;
-          values = [lesson_id, userId];
-      } else {
-          sql = `
-              SELECT m.*
-              FROM materials m
-              JOIN lessons l ON m.lesson_id = l.lesson_id
-              JOIN enrollments e ON l.course_id = e.course_id
-              WHERE m.lesson_id = ? AND e.student_id = ?`;
-          values = [lesson_id, userId];
-      }
+    //   let sql;
+    //   let values;
+    //   if (userRole === 'Quản trị viên') {
+    //       sql = 'SELECT * FROM materials WHERE lesson_id = ?';
+    //       values = [lesson_id];
+    //   } else if (userRole === 'Giáo viên') {
+    //       sql = `
+    //           SELECT m.*
+    //           FROM materials m
+    //           JOIN lessons l ON m.lesson_id = l.lesson_id
+    //           JOIN courses c ON l.course_id = c.course_id
+    //           WHERE m.lesson_id = ? AND c.teacher_id = ?`;
+    //       values = [lesson_id, userId];
+    //   } else {
+    //       sql = `
+    //           SELECT m.*
+    //           FROM materials m
+    //           JOIN lessons l ON m.lesson_id = l.lesson_id
+    //           JOIN enrollments e ON l.course_id = e.course_id
+    //           WHERE m.lesson_id = ? AND e.student_id = ?`;
+    //       values = [lesson_id, userId];
+    //   }
 
-      const materials = await query(sql, values);
-      return res.status(200).json(materials);
+    //   const materials = await query(sql, values);
+    const materials = await Material.findAll({ where: { lesson_id: req.params.lesson_id } });
+    return res.status(200).json(materials);
   } catch (error) {
       return res.status(500).json({ message: "Lỗi server", error: error.message });
   }
