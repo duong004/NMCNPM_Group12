@@ -1,9 +1,13 @@
 // Mô hình dữ liệu cho tài liệu.
 
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = new Sequelize('eduverse_db', 'root', '07052004', {
+  host: 'localhost',
+  dialect: 'mysql',
+  logging: false,
+});
 
-const Material = sequelize.define('Material', {
+const Material = sequelize.define('materials', {
   material_id: {
     type: DataTypes.STRING(20),
     primaryKey: true
@@ -11,7 +15,7 @@ const Material = sequelize.define('Material', {
   lesson_id: {
     type: DataTypes.STRING(20),
     references: {
-      model: 'Lessons',
+      model: 'lessons',
       key: 'lesson_id'
     }
   },
@@ -22,6 +26,8 @@ const Material = sequelize.define('Material', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   }
+}, {
+  timestamps: false,
 });
 
 module.exports = Material;

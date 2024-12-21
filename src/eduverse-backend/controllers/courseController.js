@@ -8,35 +8,57 @@ const generateCourseId = (courseCount) => {
 
 // Tạo khóa học mới (Chỉ 'Giáo viên' mới được tạo course)
 exports.createCourse = (req, res) => {
-    const { title, description, teacher_id, price, duration, category, cover_image, status } = req.body;
-    const userRole = req.user.role; // Giả sử req.user chứa thông tin người dùng đã xác thực
+    const { title, description, teacher_id, price, duration, category, cover_image, status} = req.body;
 
-    if (userRole !== 'Giáo viên') {
-        return res.status(403).json({ message: "Chỉ Giáo viên mới được tạo khóa học" });
-    }
+    // const userRole = req.user.role;
 
-    // Đếm số lượng khóa học hiện có để tạo course_id
-    const countCoursesSql = 'SELECT COUNT(*) as count FROM courses';
-    db.query(countCoursesSql, (countErr, countData) => {
-        if (countErr) {
-            return res.status(500).json({ message: "Lỗi server" });
+    const getUserRoleSql = 'SELECT role FROM users WHERE user_id = ?';
+    db.query(getUserRoleSql, [teacher_id], (roleErr, roleData) => {
+        if (roleErr) {
+            console.error('Database error:', roleErr);
+            return res.status(500).json({ message: "Lỗi server khi kiểm tra vai trò người dùng" });
         }
-        const courseId = generateCourseId(countData[0].count);
-        const insertSql = 'INSERT INTO courses (course_id, title, description, teacher_id, price, duration, category, cover_image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const values = [courseId, title, description, teacher_id, price, duration, category, cover_image || 'http://example.com/coverimage.jpg', status || 'Đang hoạt động'];
-        db.query(insertSql, values, (insertErr, result) => {
-            if (insertErr) {
+        let userRole = roleData[0].role;
+
+        if (userRole !== 'Giáo viên') {
+            return res.status(403).json({ message: "Chỉ Giáo viên mới được tạo khóa học" });
+        }
+    
+        // Đếm số lượng khóa học hiện có để tạo course_id
+        const countCoursesSql = 'SELECT COUNT(*) as count FROM courses';
+        db.query(countCoursesSql, (countErr, countData) => {
+            if (countErr) {
                 return res.status(500).json({ message: "Lỗi server" });
             }
-            return res.status(201).json({ message: "Khóa học đã được tạo", courseId });
+            const courseId = generateCourseId(countData[0].count);
+            const insertSql = 'INSERT INTO courses (course_id, title, description, teacher_id, price, duration, category, cover_image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            const values = [courseId, title, description, teacher_id, price, duration, category, cover_image || 'http://example.com/coverimage.jpg', status || 'Đang hoạt động'];
+            db.query(insertSql, values, (insertErr, result) => {
+                if (insertErr) {
+                    return res.status(500).json({ message: "Lỗi server" });
+                }
+                return res.status(201).json({ message: "Khóa học đã được tạo", courseId });
+            });
         });
-    });
+    })
+    
 };
 
 // Lấy danh sách khóa học
 exports.listCourses = (req, res) => {
-    const sql = 'SELECT * FROM courses';
+    const sql = 'SELECT * FROM courses ORDER BY course_id DESC';
     db.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: "Lỗi server" });
+        }
+        return res.status(200).json(results);
+    });
+};
+
+exports.listMeCourses = (req, res) => {
+    // const userId = req.user.user_id;
+    const sql = 'SELECT * FROM courses WHERE teacher_id = ?';
+    db.query(sql, 'U003', (err, results) => {
         if (err) {
             return res.status(500).json({ message: "Lỗi server" });
         }
