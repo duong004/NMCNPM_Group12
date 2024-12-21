@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
-import logo from '../../assets/images/Footer-Logo.png';
+// import logo from '../../assets/images/EduVerse_apose_1.svg';
 import orgLogo from '../../assets/images/Footer-OrgLogo.jpg';
 import { FaPhone, FaEnvelope, FaFacebook, FaTwitter } from 'react-icons/fa';
 
@@ -10,8 +10,8 @@ const Footer = () => {
         <footer className="footer">
             <div className="footer-content">
                 <div className="footer-column left-column">
-                    <img src={logo} alt="EduVerse Logo" className="footer-logo" />
-                    <h2>EduVerse</h2>
+                    {/* <img src={logo} alt="EduVerse Logo" className="footer-logo" /> */}
+                    <h1>EduVerse</h1>
                     <p><FaPhone /> Số điện thoại: 0123 456 789</p>
                     <p><FaEnvelope /> Email: info@eduverse.com</p>
                     <p><FaFacebook /> Facebook: facebook.com/eduverse</p>

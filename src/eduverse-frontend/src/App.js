@@ -4,7 +4,7 @@ import HomePage from './pages/HomePage';
 import CoursesListPage from './pages/CoursesListPage';
 import LoginPage from './components/Auth/Login';
 import RegisterPage from './components/Auth/Register';
-//import NotFoundPage from './pages/NotFoundPage';
+import NotFoundPage from './pages/NotFoundPage';
 import './App.css';
 
 const App = () => {
@@ -15,7 +15,7 @@ const App = () => {
         <Route path="/list" element={<CoursesListPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        
+        <Route path ="/error" element = {<NotFoundPage/>} />
       </Routes>
     </Router>
   );

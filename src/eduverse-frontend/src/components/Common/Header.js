@@ -1,7 +1,7 @@
 import React, { useState } from 'react';  
 import { Link } from 'react-router-dom';
 import './Header.css';  
-import logo from '../../assets/images/Coursera_test.svg'; 
+import logo from '../../assets/images/EduVerse_apose_1.svg'; 
 
 const Header = ({ isLoggedIn, userAvatar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);  // dropdown Khám phá
@@ -18,7 +18,7 @@ const Header = ({ isLoggedIn, userAvatar }) => {
       <div className="toolbar">
         {/* Logo */}
         <img src={logo} alt="EduVerse Logo" className="logo" />
-        <h1 className="site-title">EduVerse</h1>
+        {/* <h1 className="site-title">EduVerse</h1> */}
 
         {/* Dropdown Khám phá */}
         <div className="dropdown" onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>

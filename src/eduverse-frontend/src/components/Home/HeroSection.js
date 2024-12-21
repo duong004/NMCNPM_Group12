@@ -1,6 +1,6 @@
 import React from 'react';
 import './HeroSection.css';
-import coverImage from '../../assets/images/cover-eduverse.jpg';
+import coverImage from '../../assets/images/Tpbank.jpg';
 import { Link } from 'react-router-dom'
 
 const HeroSection = () => {
@@ -13,6 +13,7 @@ const HeroSection = () => {
                 <Link to="/register" className="cta-button">Get Started</Link>
             </div>
         </div>
+        
     );
 };
 
