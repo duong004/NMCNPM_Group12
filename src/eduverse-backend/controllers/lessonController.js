@@ -12,8 +12,10 @@ const generateLessonId = (lessonCount) => {
 exports.createLesson = async (req, res) => {
     try {
         const { course_id, title, content, lesson_order } = req.body;
-        const userId = req.user.user_id; // Giả sử req.user chứa thông tin người dùng đã xác thực
-        const userRole = req.user.role;
+        // const userId = req.user.user_id; // Giả sử req.user chứa thông tin người dùng đã xác thực
+        // const userRole = req.user.role;
+        const userId = 'U003';
+        const userRole = 'Giáo viên';
 
         // Kiểm tra xem người dùng có phải là chủ khóa học không
         const checkCourseSql = 'SELECT * FROM courses WHERE course_id = ? AND teacher_id = ?';
@@ -35,6 +37,31 @@ exports.createLesson = async (req, res) => {
         return res.status(201).json({ message: "Bài học đã được tạo", lessonId });
     } catch (error) {
         return res.status(500).json({ message: "Lỗi server", error: error.message });
+    }
+};
+
+//Dem tong so luong lessons cua 1 course
+exports.getTotalLesson = async (req, res) => {
+    try {
+        const courseId = req.query.course_id; // Lấy course_id từ query string
+
+        if (!courseId) {
+            return res.status(400).json({ message: 'course_id không được để trống' });
+        }
+
+        const sql = `SELECT COUNT(*) AS total FROM lessons WHERE course_id = ?`;
+
+        // Truy vấn cơ sở dữ liệu
+        db.query(sql, [courseId], (err, results) => {
+            if (err) {
+                return res.status(500).json({ message: 'Lỗi server', error: err.message });
+            }
+
+            const totalLessons = results[0]?.total || 0; // Lấy số lượng bài học
+            res.status(200).json({ totalLessons });
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
 };
 

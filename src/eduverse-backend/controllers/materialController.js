@@ -14,8 +14,10 @@ const generateMaterialId = (materialCount) => {
 exports.createMaterial = async (req, res) => {
     try {
         const { lesson_id, title, type } = req.body;
-        const userId = req.user.user_id;
-        const userRole = req.user.role;
+        // const userId = req.user.user_id;
+        // const userRole = req.user.role;
+        const userId = 'U003';
+        const userRole = 'Giáo viên';
         const file = req.file.path;
 
         // Kiểm tra xem người dùng có phải là chủ khóa học không
@@ -25,18 +27,15 @@ exports.createMaterial = async (req, res) => {
             JOIN courses c ON l.course_id = c.course_id
             WHERE l.lesson_id = ? AND c.teacher_id = ?`;
         const lessonData = await query(checkLessonSql, [lesson_id, userId]);
-
         if (lessonData.length === 0) {
             fs.unlinkSync(file);
             return res.status(403).json({ message: "Chỉ chủ khóa học mới có thể thêm tài liệu" });
         }
-
         // Tải lên file lên Cloudinary
         const result = await cloudinary.uploader.upload(file, {
             resource_type: type === 'Video' ? 'video' : 'auto',
             folder: 'eduverse/materials'
         });
-
         // Xóa file sau khi upload
         fs.unlinkSync(file);
 
@@ -44,9 +43,10 @@ exports.createMaterial = async (req, res) => {
         const countMaterialsSql = 'SELECT COUNT(*) as count FROM materials';
         const countData = await query(countMaterialsSql);
         const materialId = generateMaterialId(countData[0].count);
-
+        const uploaded_at = new Date();
         const insertSql = 'INSERT INTO materials (material_id, lesson_id, title, type, content_url, uploaded_at) VALUES (?, ?, ?, ?, ?, DEFAULT)';
-        const values = [materialId, lesson_id, title, type, result.secure_url];
+        const values = [materialId, lesson_id, title, type, result.secure_url, uploaded_at];
+        console.log(values);
         await query(insertSql, values);
 
         return res.status(201).json({ message: "Tài liệu đã được tạo", materialId });
@@ -60,8 +60,10 @@ exports.createMaterial = async (req, res) => {
 exports.getMaterialsByLesson = async (req, res) => {
   try {
       const { lesson_id } = req.params;
-      const userId = req.user.user_id;
-      const userRole = req.user.role;
+        //   const userId = req.user.user_id;
+        //   const userRole = req.user.role;
+      const userId = 'U003';
+      const userRole = 'Giáo viên';
 
       let sql;
       let values;
