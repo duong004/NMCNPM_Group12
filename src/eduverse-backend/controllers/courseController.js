@@ -9,8 +9,11 @@ const generateCourseId = (courseCount) => {
 
 // Tạo khóa học mới (Chỉ 'Giáo viên' mới được tạo course)
 exports.createCourse = (req, res) => {
-    const { title, description, teacher_id, price, duration, category, cover_image, status } = req.body;
-    const userRole = req.user.role; // Giả sử req.user chứa thông tin người dùng đã xác thực
+    const { title, description, price, duration, category, cover_image, status } = req.body;
+    // const userRole = req.user.role; // Giả sử req.user chứa thông tin người dùng đã xác thực
+    // const teacher_id = req.user.user_id; 
+    const userRole = 'Giáo viên'; // Giả sử userRole đang đăng nhập là 'Giáo viên'
+    const teacher_id = 'U003'; // Giả sử teacher_id đang đăng nhập là 'U003'
 
     if (userRole !== 'Giáo viên') {
         return res.status(403).json({ message: "Chỉ Giáo viên mới được tạo khóa học" });
@@ -37,7 +40,7 @@ exports.createCourse = (req, res) => {
 
 // Lấy danh sách khóa học
 exports.listCourses = (req, res) => {
-    const sql = 'SELECT * FROM courses';
+    const sql = 'SELECT * FROM courses ORDER BY course_id DESC';
     db.query(sql, (err, results) => {
         if (err) {
             return res.status(500).json({ message: "Lỗi server" });
