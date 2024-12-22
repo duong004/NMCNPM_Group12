@@ -38,6 +38,18 @@ exports.createCourse = (req, res) => {
     });
 };
 
+//Lay ra danh sach khoa hoc ma nguoi GV da dang tai
+exports.listMeCourses = (req, res) => {
+    // const userId = req.user.user_id;
+    const sql = 'SELECT * FROM courses WHERE teacher_id = ?';
+    db.query(sql, 'U003', (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: "Lỗi server" });
+        }
+        return res.status(200).json(results);
+    });
+};
+
 // Lấy danh sách khóa học
 exports.listCourses = (req, res) => {
     const sql = 'SELECT * FROM courses ORDER BY course_id DESC';
