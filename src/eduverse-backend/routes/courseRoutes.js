@@ -13,4 +13,5 @@ const courseController = require('../controllers/courseController');
 
 router.post('/create', courseController.createCourse);
 router.get('/list', courseController.listCourses);
+router.get('/me/list', courseController.listMeCourses);
 module.exports = router;
