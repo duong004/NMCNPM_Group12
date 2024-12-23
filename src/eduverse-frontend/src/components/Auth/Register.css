@@ -18,17 +18,17 @@
     text-align: center;
 }
 
-h2 {
+.register-heading {
     margin-bottom: 20px;
     color: #333;
 }
 
-.input-group {
+.register-input-group {
     margin-bottom: 20px;
     text-align: left;
 }
 
-label {
+.register-label {
     display: block;
     margin-bottom: 5px;
     color: #555;
@@ -42,20 +42,20 @@ input {
     box-sizing: border-box;
 }
 
-.terms {
+.register-terms {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
     text-align: left;
 }
 
-.terms input[type="checkbox"] {
+.register-terms input[type="checkbox"] {
     width: 13px; /* Chiều rộng của ô checkbox */
     height: 13px; /* Chiều cao của ô checkbox */
     margin-right: 0px; /* Tạo khoảng cách giữa checkbox và label */
 }
 
-.terms label {
+.register-terms label {
     margin-left: 10px;
     color: #555;
 }
@@ -80,19 +80,19 @@ input {
     background-color: #bbb; /* Màu xám khi chưa tích điều khoản */
 }
 
-.links {
+.register-links {
     margin-top: 20px;
 }
 
-.links p {
+.register-links p {
     margin: 10px 0;
 }
 
-.links a {
+.register-links a {
     color: #007BFF; /* Màu xanh đậm cho liên kết */
     text-decoration: none;
 }
 
-.links a:hover {
+.register-links a:hover {
     text-decoration: underline; /* Gạch chân khi hover */
 }

@@ -1,14 +1,23 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { AuthProvider } from './contexts/AuthContext';
 
-ReactDOM.render(
+// Tìm phần tử gốc
+const container = document.getElementById('root');
+// Tạo root
+const root = createRoot(container);
+
+// Render ứng dụng
+root.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <AuthProvider> {/* Bao bọc Web bằng AuthProvider */}
+      <App />
+    </AuthProvider>
+  </React.StrictMode>
 );
+
 
 
 

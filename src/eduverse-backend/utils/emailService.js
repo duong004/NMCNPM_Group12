@@ -1,29 +1,34 @@
-// Tiện ích xử lý gửi email.
+const fs = require('fs');
+const path = require('path');
+const transporter = require('../config/emailConfig');
 
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-    service: 'Gmail', // Hoặc dịch vụ email khác
-    auth: {
-        user: 'your-email@gmail.com',
-        pass: 'your-email-password'
+const sendEmail = async (to, subject, templateName, context) => {
+    try {
+        const htmlTemplate = await generateHtmlTemplate(templateName, context);
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to,
+            subject,
+            html: htmlTemplate
+        };
+        await transporter.sendMail(mailOptions);
+        console.log('Email đã được gửi thành công!');
+    } catch (error) {
+        console.error('Lỗi khi gửi email: ', error.message);
+        throw new Error('Không thể gửi email');
     }
-});
-
-const sendEmail = async (to, subject, template, context) => {
-    const mailOptions = {
-        from: 'your-email@gmail.com',
-        to: to,
-        subject: subject,
-        html: getTemplate(template, context)
-    };
-
-    await transporter.sendMail(mailOptions);
 };
 
-const getTemplate = (template, context) => {
-    // Logic để lấy template và thay thế các biến trong context
-    // Ví dụ: return compiledTemplateString;
+const generateHtmlTemplate = async (templateName, context) => {
+    const filePath = path.join(__dirname, '..', 'views', 'emails', `${templateName}.html`);
+    let source = fs.readFileSync(filePath, 'utf8');
+    
+    // Thay thế các placeholder trong template bằng giá trị thực tế
+    Object.keys(context).forEach(key => {
+        source = source.replace(new RegExp(`{{${key}}}`, 'g'), context[key]);
+    });
+
+    return source;
 };
 
-module.exports = { sendEmail };
+module.exports = sendEmail;

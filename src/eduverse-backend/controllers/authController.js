@@ -3,7 +3,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
-const { sendEmail } = require('../utils/emailService');
+const sendEmail = require('../utils/emailService');
 
 // Hàm tạo user_id theo cấu trúc U + số thứ tự
 const generateUserId = (userCount) => {
@@ -91,51 +91,79 @@ exports.verifyOTP = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
     try {
-        const sql = 'SELECT * FROM users WHERE `email` = ?';
+        const sql = 'SELECT * FROM users WHERE email = ?';
         db.query(sql, [email], async (err, data) => {
             if (err) {
+                console.error('Error querying the database:', err);
                 return res.status(500).json({ message: "Lỗi server" });
             }
             if (data.length === 0) {
                 return res.status(404).json({ message: "Người dùng không tồn tại" });
+                //return res.status(200).json({ message: 'Nếu email tồn tại trong hệ thống, bạn sẽ nhận được liên kết đặt lại mật khẩu.' });
             }
             const user = data[0];
-            const token = jwt.sign({ id: user.user_id }, 'secret', { expiresIn: '1h' });
-            const resetLink = `http://yourdomain.com/reset-password/${token}`;
-            await sendEmail(user.email, 'Reset Password', 'forgotPasswordTemplate', { RESET_LINK: resetLink });
-            return res.json({ message: 'Reset link sent to your email' });
+            const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+            
+            // Lưu token vào cơ sở dữ liệu
+            const updateTokenSql = 'UPDATE users SET token_reset = ? WHERE user_id = ?';
+            db.query(updateTokenSql, [token, user.user_id], async (updateErr) => {
+                if (updateErr) {
+                    console.error('Error updating the database:', updateErr);
+                    return res.status(500).json({ message: "Lỗi server" });
+                }
+                await sendEmail(user.email, 'Đặt lại mật khẩu', 'forgotPasswordTemplate', { RESET_LINK: resetLink });
+                return res.json({ message: 'Đã gửi liên kết đặt lại mật khẩu đến email của bạn' });
+                //return res.json({ message: 'Nếu email tồn tại trong hệ thống, bạn sẽ nhận được liên kết đặt lại mật khẩu.' });
+            });
         });
     } catch (error) {
+        console.error('Lỗi khi quên mật khẩu:', error.message);
         return res.status(500).json({ message: "Lỗi server" });
     }
 };
+
 
 // Đặt lại mật khẩu
 exports.resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
+
+    if (!password || password.length < 8) {
+        return res.status(400).json({ message: "Yêu cầu không hợp lệ." });
+    }
+
     try {
-        const decoded = jwt.verify(token, 'secret');
-        const sql = 'SELECT * FROM users WHERE `user_id` = ?';
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const sql = 'SELECT * FROM users WHERE user_id = ?';
         db.query(sql, [decoded.id], async (err, data) => {
             if (err) {
-                return res.status(500).json({ message: "Lỗi server" });
+                console.error('Error querying the database:', err);
+                //return res.status(500).json({ message: "Lỗi server" });
+                return res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại." });
             }
-            if (data.length === 0) {
-                return res.status(404).json({ message: "Người dùng không tồn tại" });
+            if (data.length === 0 || data[0].token_reset !== token) {
+                //return res.status(404).json({ message: "Người dùng không tồn tại" });
+                return res.status(400).json({ message: 'Yêu cầu không hợp lệ.' });
             }
             const user = data[0];
             const hashedPassword = await bcrypt.hash(password, 10);
-            const updateSql = 'UPDATE users SET `password` = ? WHERE `user_id` = ?';
+            const updateSql = 'UPDATE users SET password = ?, token_reset = NULL WHERE user_id = ?';
             db.query(updateSql, [hashedPassword, user.user_id], async (updateErr) => {
                 if (updateErr) {
-                    return res.status(500).json({ message: "Lỗi server" });
+                    console.error('Error updating the database:', updateErr);
+                    //return res.status(500).json({ message: "Lỗi server" });
+                    return res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại." });
                 }
-                await sendEmail(user.email, 'Password Reset Successful', 'resetPasswordTemplate', {});
-                return res.json({ message: 'Password reset successful' });
+                // Tạo token mới sau khi đặt lại mật khẩu thành công
+                const newToken = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+                await sendEmail(user.email, 'Thành công đặt lại mật khẩu', 'resetPasswordTemplate', {});
+                return res.json({ message: 'Đặt lại mật khẩu thành công', token: newToken });
             });
         });
     } catch (error) {
-        return res.status(500).json({ message: "Lỗi server" });
+        console.error('Lỗi khi đặt lại mật khẩu:', error.message);
+        //return res.status(500).json({ message: "Lỗi server" });
+        return res.status(400).json({ message: "Yêu cầu không hợp lệ." });
     }
 };

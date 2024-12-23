@@ -1,14 +1,21 @@
-// Định tuyến cho các API liên quan đến tài liệu.
-
 const express = require('express');
 const router = express.Router();
 const materialController = require('../controllers/materialController');
+const authMiddleware = require('../middlewares/authMiddleware');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Thư mục tạm để lưu trữ file trước khi upload lên Cloudinary
 
-router.post('/upload', materialController.uploadMaterial);
-router.get('/view/:id', materialController.viewMaterial);
-router.post('/create', materialController.createMaterial);
-router.get('/lesson/:lesson_id', materialController.getMaterialsByLesson);
-router.put('/update/:material_id', materialController.updateMaterial);
-router.delete('/delete/:material_id', materialController.deleteMaterial);
+
+// Thêm tài liệu (Giáo viên)
+router.post('/materials', authMiddleware.authenticate, upload.single('file'), materialController.createMaterial);
+
+// Xem tài liệu của một bài học (Phạm vi xem phụ thuộc vai trò)
+router.get('/materials/:lesson_id', authMiddleware.authenticate, materialController.getMaterialsByLesson);
+
+// Cập nhật tài liệu (Giáo viên)
+router.put('/materials/:material_id', authMiddleware.authenticate, upload.single('file'), materialController.updateMaterial);
+
+// Xóa tài liệu (Giáo viên)
+router.delete('/materials/:material_id', authMiddleware.authenticate, materialController.deleteMaterial);
 
 module.exports = router;

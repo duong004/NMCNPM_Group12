@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const reviewController = require('../controllers/reviewController');
+const authMiddleware = require('../middlewares/authMiddleware');  
 
-router.post('/create', reviewController.createReview);
-router.get('/course/:course_id', reviewController.getReviewsByCourse);
-router.put('/update/:review_id', reviewController.updateReview);
-router.delete('/delete/:review_id', reviewController.deleteReview);
-// Các route khác như update, delete, get...
+router.post('/create-review', authMiddleware.authenticate, reviewController.createReview);
+router.get('/reviews/:course_id', reviewController.getCourseReviews);
+router.put('/update-review/:review_id', authMiddleware.authenticate, reviewController.updateReview);
 
 module.exports = router;

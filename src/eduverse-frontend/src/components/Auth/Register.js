@@ -50,10 +50,10 @@ const RegisterPage = () => {
     return (
         <div className="register-page">
             <div className="register-box">
-                <h2>Đăng ký</h2>
+                <h2 className="register-heading">Đăng ký</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label htmlFor="name">Tên:</label>
+                    <div className="register-input-group">
+                        <label htmlFor="name" className="register-label">Tên:</label>
                         <input 
                             type="text" 
                             id="name" 
@@ -62,12 +62,12 @@ const RegisterPage = () => {
                             value={values.name} 
                             onChange={handleInput} 
                             required 
-                            className="form-control rounded-0"
+                            className="register-form-control rounded-0"
                         />
-                        {errors.name && <span className="text-danger">{errors.name}</span>}
+                        {errors.name && <span className="register-text-danger">{errors.name}</span>}
                     </div>
-                    <div className="input-group">
-                        <label htmlFor="email">Email:</label>
+                    <div className="register-input-group">
+                        <label htmlFor="email" className="register-label">Email:</label>
                         <input 
                             type="email" 
                             id="email" 
@@ -76,12 +76,12 @@ const RegisterPage = () => {
                             value={values.email} 
                             onChange={handleInput} 
                             required 
-                            className="form-control rounded-0"
+                            className="register-form-control rounded-0"
                         />
-                        {errors.email && <span className="text-danger">{errors.email}</span>}
+                        {errors.email && <span className="register-text-danger">{errors.email}</span>}
                     </div>
-                    <div className="input-group">
-                        <label htmlFor="confirmEmail">Nhập lại Email:</label>
+                    <div className="register-input-group">
+                        <label htmlFor="confirmEmail" className="register-label">Nhập lại Email:</label>
                         <input 
                             type="email" 
                             id="confirmEmail" 
@@ -90,12 +90,12 @@ const RegisterPage = () => {
                             value={values.confirmEmail} 
                             onChange={handleInput} 
                             required 
-                            className="form-control rounded-0"
+                            className="register-form-control rounded-0"
                         />
-                        {errors.confirmEmail && <span className="text-danger">{errors.confirmEmail}</span>}
+                        {errors.confirmEmail && <span className="register-text-danger">{errors.confirmEmail}</span>}
                     </div>
-                    <div className="input-group">
-                        <label htmlFor="password">Mật khẩu:</label>
+                    <div className="register-input-group">
+                        <label htmlFor="password" className="register-label">Mật khẩu:</label>
                         <input 
                             type="password" 
                             id="password" 
@@ -104,11 +104,11 @@ const RegisterPage = () => {
                             value={values.password} 
                             onChange={handleInput} 
                             required 
-                            className="form-control rounded-0"
+                            className="register-form-control rounded-0"
                         />
-                        {errors.password && <span className="text-danger">{errors.password}</span>}
+                        {errors.password && <span className="register-text-danger">{errors.password}</span>}
                     </div>
-                    <div className="terms">
+                    <div className="register-terms">
                         <input 
                             type="checkbox" 
                             id="terms" 
@@ -116,7 +116,7 @@ const RegisterPage = () => {
                             checked={values.termsAccepted} 
                             onChange={handleInput} 
                         />
-                        <label htmlFor="terms">Tôi đồng ý với chính sách về quyền riêng tư và điều khoản dịch vụ</label>
+                        <label htmlFor="terms" className="register-label">Tôi đồng ý với chính sách về quyền riêng tư và điều khoản dịch vụ</label>
                     </div>
                     <button 
                         type="submit" 
@@ -126,7 +126,7 @@ const RegisterPage = () => {
                         Đăng ký
                     </button>
                 </form>
-                <div className="links">
+                <div className="register-links">
                     <p>Đã có tài khoản? <Link to="/login">Đăng nhập</Link></p>
                 </div>
             </div>

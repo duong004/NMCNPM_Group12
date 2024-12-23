@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const lessonController = require('../controllers/lessonController');
+const authMiddleware = require('../middlewares/authMiddleware');  
 
-router.post('/create', lessonController.createLesson);
-router.get('/course/:course_id', lessonController.getLessonsByCourse);
-router.put('/update/:lesson_id', lessonController.updateLesson);
-router.delete('/delete/:lesson_id', lessonController.deleteLesson);
-// Các route khác như update, delete, get...
+router.post('/lessons', authMiddleware.authenticate, lessonController.createLesson);
+router.get('/lessons/:course_id', lessonController.getLessonsByCourse);
+router.put('/lessons/:lesson_id', authMiddleware.authenticate, lessonController.updateLesson);
+router.delete('/lessons/:lesson_id', authMiddleware.authenticate, lessonController.deleteLesson);
 
 module.exports = router;
