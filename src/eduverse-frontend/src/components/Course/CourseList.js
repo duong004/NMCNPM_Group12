@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { FaListUl } from "react-icons/fa6";
+import { LiaLaptopCodeSolid } from "react-icons/lia";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './CourseList.css';
@@ -89,7 +91,7 @@ const CourseList = () => {
     return (
         <section className='course-list'>
             <div className='title-holder'>
-                <h2>Danh sách khóa học</h2>
+                <h2><FaListUl />Danh sách khóa học</h2>
             </div>
             <div className="course-grid">
                 {currentCourses.map((course) => (
@@ -106,7 +108,7 @@ const CourseList = () => {
                             <Link to={{
                                 pathname: `/lesson/${course.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`, 
                                 search: `?course_id=${course.course_id}`
-                            }} className="btn">Học Ngay</Link>
+                            }} className="btn"><LiaLaptopCodeSolid /> Học Ngay</Link>
                         </div>
                     </div>
                 ))}

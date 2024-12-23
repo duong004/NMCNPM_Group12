@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { IoIosInformationCircleOutline } from "react-icons/io";
+import { IoMdLink } from "react-icons/io";
 import './Footer.css';
 // import logo from '../../assets/images/EduVerse_apose_1.svg';
 import orgLogo from '../../assets/images/Footer-OrgLogo.jpg';
@@ -23,14 +25,14 @@ const Footer = () => {
                 </div>
                 <div className="footer-column right-column">
                     <div className="footer-right-subcolumn">
-                        <h4 className="footer-heading">Thông tin</h4>
+                        <h4 className="footer-heading"><IoIosInformationCircleOutline /> Thông tin</h4>
                         <p>Quy định chung</p>
                         <p>Hướng dẫn</p>
                         <p>Các chính sách</p>
                         <p>Tin tức</p>
                     </div>
                     <div className="footer-right-subcolumn">
-                        <h4 className="footer-heading">Liên kết</h4>
+                        <h4 className="footer-heading"><IoMdLink /> Liên kết</h4>
                         <Link to="/home">Trang chủ</Link>
                         <Link to="/contact">Liên hệ</Link>
                         <Link to="/info">Thông tin hàng hóa</Link>

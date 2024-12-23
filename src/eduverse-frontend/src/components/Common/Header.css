@@ -38,9 +38,17 @@
   background-color: white; /* Nền trắng */
   border: 1px solid purple; /* Viền tím */
   color: purple; /* Màu chữ tím */
-  padding: 10px; /* Khoảng cách bên trong nút */
+  padding: 8px 12px;
   border-radius: 5px; /* Bo góc */
   cursor: pointer; /* Thay đổi con trỏ khi hover */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-dropdown-button svg {
+  font-size: 20px; /* phóng to icon */
+  margin-top: 1px; /* điều chỉnh vị trí icon cho cân đối với chữ */
 }
 
 /* Nội dung Dropdown */
@@ -90,14 +98,21 @@
 
 /* Nút Đăng nhập và Đăng ký */
 .header-btn {
-  background-color: purple; /* Nền tím */
-  color: white; /* Chữ trắng */
-  border: none; /* Loại bỏ viền */
-  padding: 10px 20px; /* Khoảng cách bên trong */
-  border-radius: 5px; /* Bo góc */
-  margin: 0 5px; /* Khoảng cách giữa các nút */
-  text-decoration: none; /* Loại bỏ gạch chân */
-  cursor: pointer; /* Thay đổi con trỏ khi hover */
+  background-color: purple; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  margin: 0 5px; 
+  text-decoration: none; 
+  cursor: pointer; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+}
+
+.header-btn svg {
+  font-size: 18px;
 }
 
 /* Ảnh đại diện của người dùng */
