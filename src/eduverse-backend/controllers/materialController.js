@@ -95,6 +95,22 @@ exports.getMaterialsByLesson = async (req, res) => {
   }
 };
 
+//Lay ra Material khi da biet lesson_id
+exports.getMaterial = async (req, res) => {
+    try {
+        const { material_id } = req.params;
+        const sql = 'SELECT * FROM materials WHERE material_id = ?';
+        db.query(sql, [material_id], (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: "Lỗi server" });
+            }
+            return res.status(200).json(result);
+        });
+    } catch (error) {
+        return res.status(500).json({ message: "Lỗi server", error: error.message });
+    }
+}
+
 // Cập nhật tài liệu (Chỉ 'Giáo viên' làm chủ khóa học có chứa bài học này mới được cập nhật tài liệu)
 exports.updateMaterial = async (req, res) => {
     try {

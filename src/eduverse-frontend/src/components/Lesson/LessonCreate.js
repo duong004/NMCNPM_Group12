@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './LessonCreate.css';
+import { toast } from '../toast-message/toast-message'
 
 const SubmitLessonForm = () => {
     const navigate = useNavigate();
@@ -25,6 +26,14 @@ const SubmitLessonForm = () => {
                 setTotalLessons(response.data.totalLessons || 0);
             } catch (error) {
                 console.error('Lỗi khi lấy tổng số bài học:', error);
+                toast({
+                    title: "Thất bại!",
+                    message: `Lỗi khi lấy tổng số bài học: ${
+                        error
+                    }`,
+                    type: "error",
+                    duration: 5000,
+                });
             }
         };
 
@@ -53,8 +62,15 @@ const SubmitLessonForm = () => {
             });
 
             console.log('Response:', response.data);
-            alert('Bài học đã được gửi thành công!');
-            navigate('/course/list');
+            toast({
+                title: "Thành công!",
+                message: "Bài học đã được tạo thành công!",
+                type: "success",
+                duration: 3000,
+            });
+            setTimeout(() => {
+                navigate('/course/me/list');
+            }, 1000);
 
             setFormData({
                 title: '',
@@ -62,7 +78,14 @@ const SubmitLessonForm = () => {
             });
         } catch (error) {
             console.error('Lỗi khi gửi dữ liệu:', error);
-            alert(`Có lỗi xảy ra: ${error.response?.data?.message || error.message}`);
+            toast({
+                title: "Thất bại!",
+                message: `Có lỗi xảy ra: ${
+                    error.response?.data?.message || error.message
+                }`,
+                type: "error",
+                duration: 5000,
+            });
         }
     };
 
@@ -104,6 +127,8 @@ const SubmitLessonForm = () => {
                 </div>
 
                 <button type="submit">Thêm bài học</button>
+                {/* Toast container */}
+                <div id="toast"></div>
             </form>
         </div>
     );

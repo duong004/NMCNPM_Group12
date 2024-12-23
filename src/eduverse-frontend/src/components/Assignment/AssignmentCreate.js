@@ -1,19 +1,22 @@
+
+import './AssignmentCreate.css';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './MaterialCreate.css';
 import { toast } from '../toast-message/toast-message'
 
-const MaterialCreate = () => {
+const AssignmentCreate = () => {
     const navigate = useNavigate();
-
     const [formData, setFormData] = useState({
         title: '',
-        type: '',
+        description: '',
+        due_date: '',
+        points: '',
+        max_attemps: '',
     });
 
     const [file, setFile] = useState();
-
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -73,7 +76,10 @@ const MaterialCreate = () => {
 
             setFormData({
                 title: '',
-                type: '',
+                description: '',
+                due_date: '',
+                points: '',
+                max_attemps: '',
             });
             setFile(null);
         } catch (error) {
@@ -88,67 +94,38 @@ const MaterialCreate = () => {
             });
         }
     };
-
     return (
-        <div className="submit-course-form">
-            <h2>Thêm Tài Liệu</h2>
-            <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <div className="form-group">
-                    <label>Tên tài liệu:</label>
-                    <input
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <div className="radio-group">
-                        <label>Loại tài liệu:</label>
-                        <label className="radio-label">
-                            <div>Tài liệu</div>
-                            <input
-                                type="radio"
-                                name="type"
-                                value="Tài liệu"
-                                checked={formData.type === 'Tài liệu'}
-                                onChange={handleChange}
-                                required
-                            />
-                        </label>
-                        <label className="radio-label">
-                            <div>Video</div>
-                            <input
-                                className="radio-label-input"
-                                type="radio"
-                                name="type"
-                                value="Video"
-                                checked={formData.type === 'Video'}
-                                onChange={handleChange}
-                                required
-                            />
-                        </label>
-                    </div>
-                </div>
-
-                <div className="form-group">
-                    <label>Chọn file:</label>
-                    <input
-                        type="file"
-                        onChange={handleFileChange}
-                        accept="*/*"
-                        required
-                    />
-                </div>
-
-                <button type="submit">Thêm tài liệu</button>
-                {/* Toast container */}
-                <div id="toast"></div>
+        <div className="assignment-create">
+            <h2>Create New Assignment</h2>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Title:
+                    <input type="text" name="title" value={formData.title} onChange={handleChange} required />
+                </label>
+                <label>
+                    Description:
+                    <textarea name="description" rows="4" cols="50" value={formData.description} onChange={handleChange} required />
+                </label>
+                <label>
+                    Due Date:
+                    <input type="date" name="due_date" value={formData.due_date} onChange={handleChange} required />
+                </label>
+                <label>
+                    Points:
+                    <input type="number" name="points" value={formData.points} onChange={handleChange} required />
+                </label>
+                <label>
+                    Max Attempts:
+                    <input type="number" name="max_attempts" value={formData.max_attempts} onChange={handleChange} required />
+                </label>
+                <label>
+                    Upload File:
+                    <input type="file" multiple onChange={handleFileChange} required />
+                </label>
+                <input type="submit" value="Submit" />
             </form>
         </div>
     );
-};
+}
 
-export default MaterialCreate;
+export default AssignmentCreate;

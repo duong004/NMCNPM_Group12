@@ -18,5 +18,6 @@ const upload = multer({ dest: 'uploads/' }); // Thư mục tạm để lưu tr�
 // // Xóa tài liệu (Giáo viên)
 // router.delete('/materials/:material_id', authMiddleware.authenticate, materialController.deleteMaterial);
 router.get('/materials/:lesson_id', materialController.getMaterialsByLesson);
+router.get('/materials/show/:material_id', materialController.getMaterial);
 router.post('/materials', upload.single('file'), materialController.createMaterial);
 module.exports = router;

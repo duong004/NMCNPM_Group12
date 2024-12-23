@@ -8,6 +8,8 @@ import LessonCreatePage from './pages/LessonCreatePage';
 import LessonShowPage from './pages/LessonShowPage';
 import MeListLessonPage from './pages/MeListLessonPage';
 import MaterialCreatePage from './pages/MaterialCreatePage';
+import MaterialShowPage from './pages/MaterialShowPage';
+import AssignmentCreatePage from './pages/AssignmentCreatePage';
 import LoginPage from './components/Auth/Login';
 import RegisterPage from './components/Auth/Register';
 import ForgotPassword from './components/Auth/ForgotPassword';
@@ -31,6 +33,8 @@ const App = () => {
         <Route path="/lesson/:courseName/show" element={<LessonShowPage />} />
         <Route path="/lesson/:courseName/me/list" element={<MeListLessonPage />} />
         <Route path="/material/:lessonName/create" element={<MaterialCreatePage />} />
+        <Route path="/material/:lessonName/show" element={<MaterialShowPage />} />
+        <Route path="/assignment/:lessonName/create" element={<AssignmentCreatePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
