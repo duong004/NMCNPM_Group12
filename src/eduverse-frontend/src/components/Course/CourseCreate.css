@@ -41,7 +41,7 @@
     padding: 3px;
 }
 
-button {
+.btn-course-create {
     display: block;
     width: 100%;
     padding: 10px;
@@ -54,7 +54,7 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.btn-course-create:hover {
     background-color: #820e7a;
 }
 

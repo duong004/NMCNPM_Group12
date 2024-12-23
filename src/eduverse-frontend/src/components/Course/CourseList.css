@@ -82,20 +82,22 @@
 }
 
 .btn {
-    width: 80px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    min-width: 125px; 
+    background-color: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.btn {
-    display: inline-block;
-    text-align: center;
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #fff;
-    background-color: purple;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
+.btn svg {
+    font-size: 22px;
+    margin-bottom: 2px;
 }
 
 .btn:hover {

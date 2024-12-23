@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { FaTrash } from "react-icons/fa6";
+import { FaSearch } from "react-icons/fa";
+import { TbBookUpload } from "react-icons/tb";
+import { CiEdit } from "react-icons/ci";
+import { FaListUl } from "react-icons/fa6";
+import { MdPostAdd } from "react-icons/md";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './MeListCourses.css';
@@ -22,9 +28,9 @@ const UserCourses = () => {
 
     return (
         <div className="user-courses">
-            <h2>Danh sách khóa học bạn đã đăng</h2>
+            <h2><FaListUl />  Danh sách khóa học bạn đã đăng</h2>
             <div className="add-button">
-                <button onClick={() => navigate('/course/Create')}>Thêm khóa học</button>
+                <button className='btn-course-add' onClick={() => navigate('/course/Create')}><MdPostAdd /> Thêm khóa học</button>
             </div>
             {courses.length === 0 ? (
                 <p style={{textAlign: "center"}}>Bạn chưa đăng khóa học nào.</p>
@@ -43,15 +49,15 @@ const UserCourses = () => {
                                 <button onClick={() => 
                                     navigate(
                                         `/lesson/${course.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/create?course_id=${course.course_id}`
-                                    )}>Đăng bài học
+                                    )}><TbBookUpload /> Đăng bài học
                                 </button>
                                 <button onClick={() => 
                                     navigate(
                                         `/lesson/${course.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/me/list?course_id=${course.course_id}`
-                                    )}>Chi tiết
+                                    )}><FaSearch /> Chi tiết
                                 </button>
-                                <button onClick={() => navigate('/course/update')}>Sửa</button>
-                                <button onClick={() => navigate('/course/delete')}>Xóa</button>
+                                <button onClick={() => navigate('/course/update')}><CiEdit /> Sửa</button>
+                                <button onClick={() => navigate('/course/delete')}><FaTrash /> Xóa</button>
                             </div>
                         </div>
                     ))}

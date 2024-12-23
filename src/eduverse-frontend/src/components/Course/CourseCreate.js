@@ -188,7 +188,7 @@ const SubmitCourseForm = () => {
                     </select>
                 </div> */}
 
-                <button type="submit">Thêm khóa học</button>
+                <button className="btn-course-create" type="submit">Thêm khóa học</button>
                 {/* Toast container */}
                 <div id="toast"></div>
             </form>

@@ -126,7 +126,7 @@ const SubmitLessonForm = () => {
                     />
                 </div>
 
-                <button type="submit">Thêm bài học</button>
+                <button className="btn-lesson-create" type="submit">Thêm bài học</button>
                 {/* Toast container */}
                 <div id="toast"></div>
             </form>

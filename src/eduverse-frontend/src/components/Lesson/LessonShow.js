@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { FaListUl, FaVideo } from "react-icons/fa6";
+import { FaFileAlt } from "react-icons/fa";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './LessonShow.css';
@@ -8,7 +10,7 @@ const LessonShow = () => {
     const [lessons, setLessons] = useState([]);
     const [materials, setMaterials] = useState({});
     const [assignments, setAssignments] = useState({});
-    const [expandedLesson, setExpandedLesson] = useState(null);
+    const [expandedLessons, setExpandedLessons] = useState([]);
 
     useEffect(() => {
         const fetchLessons = async () => {
@@ -70,7 +72,13 @@ const LessonShow = () => {
     }, [lessons]);
 
     const handleExpandLesson = (lessonId) => {
-        setExpandedLesson((prevLessonId) => (prevLessonId === lessonId ? null : lessonId));
+        setExpandedLessons(prevLessons => {
+            if (prevLessons.includes(lessonId)) {
+                return prevLessons.filter(id => id !== lessonId);
+            } else {
+                return [...prevLessons, lessonId];
+            }
+        });
     };
 
     const handleMaterialClick = (material, lesson) => {
@@ -83,7 +91,7 @@ const LessonShow = () => {
 
     return (
         <div className="lessons-page">
-            <h2>Danh Sách Bài Học</h2>
+            <h2><FaListUl /> Danh Sách Bài Học</h2>
             {/* <p className="course-content">{courseContent}</p> */}
 
             {lessons.length === 0 ? (
@@ -99,7 +107,7 @@ const LessonShow = () => {
                                 </div>
                                 <span className="material-count">{materials[lesson.lesson_id]?.length || 0} tài liệu</span>
                             </div>
-                            {expandedLesson === lesson.lesson_id && (
+                            {expandedLessons.includes(lesson.lesson_id) && (
                                 <div>
                                     <div className="assignment-list">
                                         {assignments[lesson.lesson_id]?.length > 0 ? (
@@ -110,7 +118,7 @@ const LessonShow = () => {
                                                 >
                                                     <div className='assignment-item-content'>
                                                         <p>
-                                                            {assignment.title}
+                                                            {assignment.title} 
                                                         </p>
                                                         <p>
                                                             {assignment.attachment1}
@@ -134,7 +142,11 @@ const LessonShow = () => {
                                                     onClick={() => handleMaterialClick(material, lesson)}
                                                 >
                                                     <div className='material-item-content'>
-                                                        {material.type}: {material.title} 
+                                                        {material.type === 'Video' ? (
+                                                            <><FaVideo /> {material.title}</>
+                                                        ) : (
+                                                            <><FaFileAlt /> {material.title}</>
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))

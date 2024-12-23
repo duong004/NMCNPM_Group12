@@ -52,7 +52,14 @@
 }
 
 .footer-heading {
-  margin-bottom: 10px;
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+
+.footer-heading svg {
+  font-size: 16px; /* kích thước icon ban đầu */
+  margin-bottom: 0;
 }
 
 p {

@@ -143,7 +143,7 @@ const MaterialCreate = () => {
                     />
                 </div>
 
-                <button type="submit">Thêm tài liệu</button>
+                <button className="btn-material-create" type="submit">Thêm tài liệu</button>
                 {/* Toast container */}
                 <div id="toast"></div>
             </form>

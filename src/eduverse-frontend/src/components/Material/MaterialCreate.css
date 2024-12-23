@@ -56,7 +56,7 @@
     padding: 3px;
 }
 
-button {
+.btn-material-create {
     display: block;
     width: 100%;
     padding: 10px;
@@ -69,6 +69,6 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.btn-material-create:hover {
     background-color: #820e7a;
 }

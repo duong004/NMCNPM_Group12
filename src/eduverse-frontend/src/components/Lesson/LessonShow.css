@@ -78,4 +78,14 @@ h2 {
     color:#555
 }
 
+.material-item-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.material-item-content svg {
+    font-size: 18px;
+}
+
 
