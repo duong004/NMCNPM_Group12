@@ -7,6 +7,7 @@ const MeListLesson = () => {
   const navigate =  useNavigate();
   const [lessons, setLessons] = useState([]);
   const [materials, setMaterials] = useState({});
+  const [assignments, setAssignments] = useState({});
   const [selectedLesson, setSelectedLesson] = useState(null);
 
   useEffect(() => {
@@ -39,10 +40,27 @@ const MeListLesson = () => {
     }
   };
 
+  const fetchAssignments = async (lessonId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/assignments/assignments/${lessonId}`
+      );
+      setAssignments((prev) => ({
+       ...prev,
+        [lessonId]: response.data,
+      }));
+    } catch (error) {
+      console.error("Lỗi khi lấy tài bài tập: ", error);
+    }
+  }
+
   const toggleLesson = (lessonId) => {
     setSelectedLesson((prev) => (prev === lessonId ? null : lessonId));
     if (!materials[lessonId]) {
       fetchDocuments(lessonId);
+    }
+    if (!assignments[lessonId]) {
+      fetchAssignments(lessonId);
     }
   };
 
@@ -74,12 +92,6 @@ const MeListLesson = () => {
                       `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/create?lesson_id=${lesson.lesson_id}`
                     )}
                   >
-                    Thêm
-                  </button>
-                  <button
-                    className="btn-lesson"
-                    onClick={() => alert(`Sửa bài học: ${lesson.title}`)}
-                  >
                     Sửa
                   </button>
                   <button
@@ -92,30 +104,63 @@ const MeListLesson = () => {
               </div>
               {selectedLesson === lesson.lesson_id && (
                 <div className="lesson-details">
-                  <h4>Tài liệu</h4>
-                  {materials[lesson.lesson_id]?.length > 0 ? (
-                    materials[lesson.lesson_id].map((doc) => (
-                      <div key={doc.material_id} className="document-item">
-                        <span>{doc.title}</span>
-                        <div className="document-item-btn">
-                          <button
-                            className="btn-lesson"
-                            onClick={() => alert(`Sửa tài liệu: ${doc.title}`)}
-                          >
-                            Sửa
-                          </button>
-                          <button
-                            className="btn-lesson"
-                            onClick={() => alert(`Xóa tài liệu: ${doc.title}`)}
-                          >
-                            Xóa
-                          </button>
-                        </div>
+                  <div>
+                    <div className="assignment-header">
+                      <h4>Bài tập</h4>
+                      <div key={lesson.lesson_id} className="assignment-header-btn">
+                        <button
+                          className="btn-lesson"
+                          onClick={() => navigate(
+                            `/assignment/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/create?lesson_id=${lesson.lesson_id}`
+                          )}
+                        >
+                          Thêm
+                        </button>
+                        <button
+                          className="btn-lesson"
+                          onClick={() => alert(`Xóa bài tập: ${lesson.lesson_id}`)}
+                        >
+                          Xóa
+                        </button>
                       </div>
+                    </div>
+                    {assignments[lesson.lesson_id]?.length > 0? (
+                      assignments[lesson.lesson_id].map((assignment) => (
+                        <div key={assignment.assignment_id} className="assignment-item">
+                          <span>{assignment.title}</span>
+                        </div>
                     ))
                   ) : (
                     <p>Không có tài liệu nào</p>
                   )}
+                          
+                  </div>
+                  <div>
+                    <h4>Tài liệu</h4>
+                    {materials[lesson.lesson_id]?.length > 0 ? (
+                      materials[lesson.lesson_id].map((doc) => (
+                        <div key={doc.material_id} className="document-item">
+                          <span>{doc.title}</span>
+                          <div className="document-item-btn">
+                            <button
+                              className="btn-lesson"
+                              onClick={() => alert(`Sửa tài liệu: ${doc.title}`)}
+                            >
+                              Sửa
+                            </button>
+                            <button
+                              className="btn-lesson"
+                              onClick={() => alert(`Xóa tài liệu: ${doc.title}`)}
+                            >
+                              Xóa
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p>Không có tài liệu nào</p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

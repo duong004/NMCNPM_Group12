@@ -71,7 +71,7 @@
   border-top: 1px solid #eee;
 }
 
-.document-item {
+.document-item, .assignment-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -79,9 +79,17 @@
   border-bottom: 1px solid #eee;
 }
 
-.document-item-btn {
+.document-item-btn, .assignment-header-btn {
   display: flex;
   justify-content: flex-end;
+}
+
+.assignment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 4px;
+  border-bottom: 1px solid #eee;
 }
 
 .document-item:last-child {
@@ -104,4 +112,5 @@
 .btn-lesson:hover {
   background-color: #1976d2;
 }
+
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './CourseCreate.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { toast } from '../toast-message/toast-message'
 const SubmitCourseForm = () => {
     const navigate = useNavigate();
 
@@ -39,8 +39,16 @@ const SubmitCourseForm = () => {
             const response = await axios.post('http://localhost:5000/api/courses/create', formData);
             
             console.log('Response:', response.data);
-            alert('Khóa học đã được gửi thành công!');
-            navigate('/course/list');
+            // alert('Khóa học đã được gửi thành công!');
+            toast({
+                title: "Thành công!",
+                message: "Khóa học đã được tạo thành công!",
+                type: "success",
+                duration: 3000,
+            });
+            setTimeout(() => {
+                navigate('/course/list');
+            }, 1000);
     
             // Reset form data
             setFormData({
@@ -54,11 +62,19 @@ const SubmitCourseForm = () => {
             });
         } catch (error) {
             console.error('Lỗi khi gửi dữ liệu:', error);
-            alert(
-                `Có lỗi xảy ra: ${
+            // alert(
+            //     `Có lỗi xảy ra: ${
+            //         error.response?.data?.message || error.message
+            //     }`
+            // );
+            toast({
+                title: "Thất bại!",
+                message: `Có lỗi xảy ra: ${
                     error.response?.data?.message || error.message
-                }`
-            );
+                }`,
+                type: "error",
+                duration: 5000,
+            });
         }
         // fetch('http://localhost:5000/api/courses/create', {
         //     method: 'POST',
@@ -157,7 +173,7 @@ const SubmitCourseForm = () => {
                     />
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                     <label>Trạng thái:</label>
                     <select
                         name="status"
@@ -170,9 +186,11 @@ const SubmitCourseForm = () => {
                         <option value="Đang tạm dừng">Đang tạm dừng</option>
                         <option value="Đã xóa">Đã xóa</option>
                     </select>
-                </div>
+                </div> */}
 
                 <button type="submit">Thêm khóa học</button>
+                {/* Toast container */}
+                <div id="toast"></div>
             </form>
         </div>
     );

@@ -14,8 +14,10 @@ const generateAssignmentId = (assignmentCount) => {
 exports.createAssignment = async (req, res) => {
     try {
         const { lesson_id, title, description, due_date, point, max_attemps } = req.body;
-        const userId = req.user.user_id;
-        const userRole = req.user.role;
+        // const userId = req.user.user_id;
+        // const userRole = req.user.role;
+        const userId = 'U003';
+        const userRole = 'Giáo viên';
         const files = req.files;
 
         // Kiểm tra xem người dùng có phải là chủ khóa học không
@@ -67,8 +69,10 @@ exports.createAssignment = async (req, res) => {
 exports.getAssignmentsByLesson = async (req, res) => {
     try {
         const { lesson_id } = req.params;
-        const userId = req.user.user_id;
-        const userRole = req.user.role;
+        // const userId = req.user.user_id;
+        // const userRole = req.user.role;
+        const userId = 'U003';
+        const userRole = 'Giáo viên';
 
         let sql;
         let values;
