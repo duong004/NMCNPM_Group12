@@ -1,9 +1,8 @@
-
 import './AssignmentCreate.css';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toast } from '../toast-message/toast-message'
+import { toast } from '../toast-message/toast-message';
 
 const AssignmentCreate = () => {
     const navigate = useNavigate();
@@ -12,11 +11,11 @@ const AssignmentCreate = () => {
         description: '',
         due_date: '',
         points: '',
-        max_attemps: '',
+        max_attempts: '',
     });
 
-    const [file, setFile] = useState();
-    
+    const [files, setFiles] = useState([]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -26,7 +25,7 @@ const AssignmentCreate = () => {
     };
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
+        setFiles(Array.from(e.target.files)); // Chấp nhận nhiều tệp
     };
 
     const handleSubmit = async (e) => {
@@ -35,11 +34,10 @@ const AssignmentCreate = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const lessonId = urlParams.get('lesson_id');
 
-        // Kiểm tra xem file đã được chọn chưa
-        if (!file) {
+        if (files.length === 0) {
             toast({
                 title: "Lỗi!",
-                message: "Vui lòng chọn 1 file!",
+                message: "Vui lòng chọn ít nhất 1 file!",
                 type: "error",
                 duration: 5000,
             });
@@ -48,25 +46,19 @@ const AssignmentCreate = () => {
 
         try {
             const fileData = new FormData();
-
-            // Thêm các trường từ `formData` vào `FormData`
             Object.keys(formData).forEach((key) => {
                 fileData.append(key, formData[key]);
             });
-
-            // Thêm `lesson_id`
             fileData.append('lesson_id', lessonId);
+            files.forEach((file) => {
+                fileData.append('files', file); // Thêm tất cả các tệp
+            });
 
-            // Thêm file
-            fileData.append('file', file);
-
-            const response = await axios.post('http://localhost:5000/api/materials/materials', fileData);
-
+            const response = await axios.post('http://localhost:5000/api/assignments/assignments', fileData);
             console.log('Response:', response.data);
-            // alert('Tài liệu đã được thêm thành công!');
             toast({
                 title: "Thành công!",
-                message: "Tài liệu đã được thêm thành công!",
+                message: "Bài tập đã được thêm thành công!",
                 type: "success",
                 duration: 3000,
             });
@@ -79,50 +71,91 @@ const AssignmentCreate = () => {
                 description: '',
                 due_date: '',
                 points: '',
-                max_attemps: '',
+                max_attempts: '',
             });
-            setFile(null);
+            setFiles([]);
         } catch (error) {
-            console.error('Lỗi khi gửi dữ liệu:', error);
             toast({
                 title: "Thất bại!",
-                message: `Có lỗi xảy ra: ${
-                    error.response?.data?.message || error.message
-                }`,
+                message: `Có lỗi xảy ra: ${error.response?.data?.message || error.message}`,
                 type: "error",
                 duration: 5000,
             });
         }
     };
+
     return (
         <div className="assignment-create">
-            <h2>Create New Assignment</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Title:
-                    <input type="text" name="title" value={formData.title} onChange={handleChange} required />
-                </label>
-                <label>
-                    Description:
-                    <textarea name="description" rows="4" cols="50" value={formData.description} onChange={handleChange} required />
-                </label>
-                <label>
-                    Due Date:
-                    <input type="date" name="due_date" value={formData.due_date} onChange={handleChange} required />
-                </label>
-                <label>
-                    Points:
-                    <input type="number" name="points" value={formData.points} onChange={handleChange} required />
-                </label>
-                <label>
-                    Max Attempts:
-                    <input type="number" name="max_attempts" value={formData.max_attempts} onChange={handleChange} required />
-                </label>
-                <label>
-                    Upload File:
-                    <input type="file" multiple onChange={handleFileChange} required />
-                </label>
-                <input type="submit" value="Submit" />
+            <h2>Tạo Bài Tập</h2>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+                <div className="form-group">
+                    <label>Tên bài:</label>
+                    <input
+                        type="text"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Miêu tả:</label>
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        rows="4"
+                        required
+                    ></textarea>
+                </div>
+
+                <div className="form-group">
+                    <label>Hạn nộp:</label>
+                    <input
+                        type="date"
+                        name="due_date"
+                        value={formData.due_date}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Điểm</label>
+                    <input
+                        type="number"
+                        name="points"
+                        value={formData.points}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Số lần nộp tối đa:</label>
+                    <input
+                        type="number"
+                        name="max_attempts"
+                        value={formData.max_attempts}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Chọn file:</label>
+                    <input
+                        type="file"
+                        onChange={handleFileChange}
+                        accept="*/*"
+                        multiple
+                        required
+                    />
+                </div>
+
+                <button className="btn-material_create" type="submit">Thêm bài tập</button>
+                <div id="toast"></div>
             </form>
         </div>
     );

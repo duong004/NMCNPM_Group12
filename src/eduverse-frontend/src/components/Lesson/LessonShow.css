@@ -54,6 +54,13 @@ h2 {
     color: #555;
 }
 
+.assignment-list h2 {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 20px;
+    font-size: 16px;
+}
+
 .assignment-list,
 .materials-list {
     padding: 10px 20px;
@@ -61,7 +68,7 @@ h2 {
     border: 1px solid #ddd;
 }
 
-.assignment-item-content,
+.assignment-item-content a,
 .material-item-content {
     padding: 5px 0;
     cursor: pointer;
@@ -76,12 +83,6 @@ h2 {
 
 .material-item-content:hover {
     color:#555
-}
-
-.material-item-content {
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .material-item-content svg {

@@ -13,7 +13,7 @@ const generateAssignmentId = (assignmentCount) => {
 // Thêm bài tập mới (Chỉ 'Giáo viên' làm chủ khóa học có chứa bài học này mới được thêm bài tập)
 exports.createAssignment = async (req, res) => {
     try {
-        const { lesson_id, title, description, due_date, point, max_attemps } = req.body;
+        const { lesson_id, title, description, due_date, points, max_attemps } = req.body;
         // const userId = req.user.user_id;
         // const userRole = req.user.role;
         const userId = 'U003';
@@ -49,12 +49,12 @@ exports.createAssignment = async (req, res) => {
         const assignmentId = generateAssignmentId(countData[0].count);
 
         const insertSql = `
-            INSERT INTO assignments (assignment_id, lesson_id, title, description, attachment1, attachment2, due_date, point, max_attemps)
+            INSERT INTO assignments (assignment_id, lesson_id, title, description, attachment1, attachment2, due_date, points, max_attemps)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const values = [
             assignmentId, lesson_id, title, description,
             attachments[0] || null, attachments[1] || null,
-            due_date || '9999-12-31', point, max_attemps || 9999
+            due_date || '9999-12-31', points, max_attemps || 9999
         ];
         await query(insertSql, values);
 
@@ -103,6 +103,22 @@ exports.getAssignmentsByLesson = async (req, res) => {
         return res.status(500).json({ message: "Lỗi server", error: error.message });
     }
 };
+
+//Lay ra Assignment khi da biet lesson_id
+exports.getAssignment = async (req, res) => {
+    try {
+        const { assignment_id } = req.params;
+        const sql = 'SELECT * FROM assignments WHERE assignment_id = ?';
+        db.query(sql, [assignment_id], (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: "Lỗi server" });
+            }
+            return res.status(200).json(result);
+        });
+    } catch (error) {
+        return res.status(500).json({ message: "Lỗi server", error: error.message });
+    }
+}
 
 // Cập nhật bài tập (Chỉ 'Giáo viên' làm chủ khóa học có chứa bài học này mới được cập nhật bài tập)
 exports.updateAssignment = async (req, res) => {

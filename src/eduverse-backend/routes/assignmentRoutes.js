@@ -13,6 +13,7 @@ const upload = multer({ dest: 'uploads/' }); // Thư mục tạm để lưu tr�
 
 router.post('/assignments', upload.array('files', 2), assignmentController.createAssignment);
 router.get('/assignments/:lesson_id', assignmentController.getAssignmentsByLesson);
+router.get('/assignments/show/:assignment_id', assignmentController.getAssignment);
 
 module.exports = router;
 
