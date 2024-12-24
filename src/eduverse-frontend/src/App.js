@@ -10,6 +10,7 @@ import MeListLessonPage from './pages/MeListLessonPage';
 import MaterialCreatePage from './pages/MaterialCreatePage';
 import MaterialShowPage from './pages/MaterialShowPage';
 import AssignmentCreatePage from './pages/AssignmentCreatePage';
+import AssignmentShowPage from './pages/AssignmentShowPage';
 import LoginPage from './components/Auth/Login';
 import RegisterPage from './components/Auth/Register';
 import ForgotPassword from './components/Auth/ForgotPassword';
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/material/:lessonName/create" element={<MaterialCreatePage />} />
         <Route path="/material/:lessonName/show" element={<MaterialShowPage />} />
         <Route path="/assignment/:lessonName/create" element={<AssignmentCreatePage />} />
+        <Route path="/assignment/:lessonName/show" element={<AssignmentShowPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaListUl, FaVideo } from "react-icons/fa6";
 import { FaFileAlt } from "react-icons/fa";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './LessonShow.css';
 
 const LessonShow = () => {
@@ -110,6 +110,7 @@ const LessonShow = () => {
                             {expandedLessons.includes(lesson.lesson_id) && (
                                 <div>
                                     <div className="assignment-list">
+                                    <h2>Danh sách bài tập</h2>
                                         {assignments[lesson.lesson_id]?.length > 0 ? (
                                             assignments[lesson.lesson_id].map((assignment) => (
                                                 <div
@@ -117,15 +118,11 @@ const LessonShow = () => {
                                                     className="assignment-item"
                                                 >
                                                     <div className='assignment-item-content'>
-                                                        <p>
-                                                            {assignment.title} 
-                                                        </p>
-                                                        <p>
-                                                            {assignment.attachment1}
-                                                        </p>
-                                                        <p>
-                                                            {assignment.attachment1}
-                                                        </p>
+                                                        <Link to={{
+                                                            pathname: `/assignment/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
+                                                            search: `?assignment_id=${assignment.assignment_id}`
+                                                        }}> 
+                                                            {assignment.title}</Link>
                                                     </div>
                                                 </div>
                                             ))
