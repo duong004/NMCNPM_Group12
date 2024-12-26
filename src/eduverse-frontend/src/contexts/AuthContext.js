@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { login, logout, getUserProfile } from '../services/authService';
+import { login, logout, getUserProfile, parseJWT } from '../services/authService';
 
 export const AuthContext = createContext();
 
@@ -9,10 +9,14 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        console.log('Retrieved token:', token); // Thêm dòng này
         if (token) {
+            const decodedToken = parseJWT(token);
+            console.log('Decoded token:', decodedToken); // Thêm dòng này
             getUserProfile()
                 .then(profile => {
-                    setUser(profile);
+                    setUser({ ...profile, ...decodedToken });
+                    console.log('User profile set:', profile);
                     setIsLoggedIn(true);
                 })
                 .catch(error => {
@@ -26,7 +30,8 @@ export const AuthProvider = ({ children }) => {
     const handleLogin = async (email, password) => {
         try {
             const data = await login(email, password);
-            setUser(data.user);
+            const decodedToken = parseJWT(data.token);
+            setUser({ ...data.user, ...decodedToken });
             setIsLoggedIn(true);
         } catch (error) {
             console.error("Login failed", error);
@@ -46,19 +51,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
-
-/*import React, { createContext, useState } from 'react';
-
-export const AuthContext = createContext();
-
-export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userAvatar, setUserAvatar] = useState('');
-
-  return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, userAvatar, setUserAvatar }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};*/
