@@ -63,6 +63,7 @@ exports.login = async (req, res) => {
                 return res.status(404).json({ message: "Người dùng không tồn tại" });
             }
             const user = data[0];
+            console.log(user);
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 return res.status(400).json({ message: "Mật khẩu không đúng" });
@@ -74,7 +75,8 @@ exports.login = async (req, res) => {
                 if (updateErr) {
                     return res.status(500).json({ message: "Lỗi server khi cập nhật thông tin đăng nhập" });
                 }
-                return res.status(200).json({ message: "Đăng nhập thành công", token });
+                /* update respone when logging in */
+                return res.status(200).json({ message: "Đăng nhập thành công", token, user });
             });
         });
     } catch (error) {

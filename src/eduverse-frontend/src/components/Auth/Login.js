@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Validation from './LoginValidation';
 import axios from 'axios';
 import Header from '../../components/Common/Header';
-import HomePage from '../../pages/HomePage';
+//import HomePage from '../../pages/HomePage';
 import './Login.css';
 
 const LoginPage = () => {
@@ -19,6 +19,7 @@ const LoginPage = () => {
     };
 
     const handleSubmit = async (e) => {
+        console.log("Xử lý đăng nhập!");
         e.preventDefault();
         const validationErrors = Validation(values);
         setErrors(validationErrors);
@@ -26,8 +27,12 @@ const LoginPage = () => {
         if (Object.keys(validationErrors).length === 0) {
             try {
                 const res = await axios.post('http://localhost:5000/api/auth/login', values);
+                console.log("Response from API:", res.data.message);
                 if (res.data.message === "Đăng nhập thành công") {
-                    navigate('/home');
+                    localStorage.setItem('token', res.data.token);
+                    console.log("save data user to LocalStorage");
+                    localStorage.setItem('user', JSON.stringify(res.data.user));
+                    navigate('/my-profile');
                 } else {
                     alert(res.data.message);
                 }
