@@ -32,6 +32,7 @@ const LoginPage = () => {
                     localStorage.setItem('token', res.data.token);
                     console.log("save data user to LocalStorage");
                     localStorage.setItem('user', JSON.stringify(res.data.user));
+                    localStorage.setItem('userData', JSON.stringify(res.data.userData));
                     navigate('/my-profile');
                 } else {
                     alert(res.data.message);

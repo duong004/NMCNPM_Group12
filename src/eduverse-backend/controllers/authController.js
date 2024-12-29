@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const sendEmail = require('../utils/emailService');
+const {getUserByEmail} = require('../models/UserModel')
 
 // Hàm tạo user_id theo cấu trúc U + số thứ tự
 const generateUserId = (userCount) => {
@@ -20,7 +21,6 @@ exports.register = async (req, res) => {
         const checkEmailSql = 'SELECT * FROM users WHERE `email` = ?';
         db.query(checkEmailSql, [email], async (err, data) => {
             if (err) {
-                
                 return res.status(500).json({ message: "Lỗi server" });
             }
             if (data.length > 0) {
@@ -45,6 +45,7 @@ exports.register = async (req, res) => {
                 });
             });
         });
+
     } catch (error) {
         return res.status(500).json({ message: "Lỗi server" });
     }
@@ -69,15 +70,137 @@ exports.login = async (req, res) => {
                 return res.status(400).json({ message: "Mật khẩu không đúng" });
             }
             const token = jwt.sign({ id: user.user_id }, 'secret', { expiresIn: '1h' });
-            // Cập nhật last_login
-            const updateLastLoginSql = 'UPDATE users SET last_login = ? WHERE user_id = ?';
-            db.query(updateLastLoginSql, [new Date(), user.user_id], (updateErr) => {
-                if (updateErr) {
-                    return res.status(500).json({ message: "Lỗi server khi cập nhật thông tin đăng nhập" });
-                }
-                /* update respone when logging in */
-                return res.status(200).json({ message: "Đăng nhập thành công", token, user });
+            // Lấy tất cả thông tin của user để lưu trữ vào LocalStorage
+            userId = user.user_id;
+            // Lấy tất cả thông tin của user từ các bảng khác nhau
+            const getCoursesEnrolled = new Promise((resolve, reject) => {
+                const query = 'SELECT * FROM enrollments WHERE `student_id` = ?';
+                db.query(query, [userId], (err, data) => {
+                    if (err) {
+                        reject("undefined error while getting courses enrolled");
+                    } else {
+                        resolve(data);
+                    }
+                });
             });
+
+            const getNotifications = new Promise((resolve, reject) => {
+                const query = 'SELECT * FROM notifications WHERE `user_id` = ?';
+                db.query(query, [userId], (err, data) => {
+                    if (err) {
+                        reject("undefined error while getting notifications");
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
+
+            const getPayments = new Promise((resolve, reject) => {
+                const query = 'SELECT * FROM payments WHERE `student_id` = ?';
+                db.query(query, [userId], (err, data) => {
+                    if (err) {
+                        reject("undefined error while getting payment infos");
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
+
+            const getPersonalInfo = new Promise((resolve, reject) => {
+                const query = 'SELECT * FROM personal WHERE `user_id` = ?';
+                db.query(query, [userId], (err, data) => {
+                    if (err) {
+                        reject("undefined error while getting personal info");
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
+
+            try {
+                const [coursesEnrolled, notifications, payments, personalInfo] = await Promise.all([
+                    getCoursesEnrolled,
+                    getNotifications,
+                    getPayments,
+                    getPersonalInfo
+                ]);
+
+                const userData = {
+                    coursesEnrolled,
+                    notifications,
+                    payments,
+                    personalInfo
+                };
+                console.log(userData);
+                // Cập nhật last_login
+                const updateLastLoginSql = 'UPDATE users SET last_login = ? WHERE user_id = ?';
+                db.query(updateLastLoginSql, [new Date(), user.user_id], (updateErr) => {
+                    if (updateErr) {
+                        return res.status(500).json({ message: "Lỗi server khi cập nhật thông tin đăng nhập" });
+                    }
+                    // Trả về dữ liệu người dùng và token sau khi đăng nhập thành công
+                    return res.status(200).json({ message: "Đăng nhập thành công", token, user, userData });
+                });
+
+            } catch (error) {
+                return res.status(500).json({ message: error });
+            }
+            // const getCoursesEnrolled = 'SELECT * FROM enrollments WHERE `student_id` = ?';
+            // db.query(getCoursesEnrolled, [user_id], async(err, data) => {
+            //     if(err){
+            //         console.log("undefined error while getting courses enrolled");
+            //     }
+            //     if(data.length == 0){
+            //         console.log("No courses enrolled!");
+            //     }
+            //     const coursesEnrolled = data;
+            // })
+            // // Lấy notifications 
+            // const getNotific_s = 'SELECT * FROM notifications WHERE `user_id` = ?';
+            // db.query(getNotific_s, [user_id], async(err, data) => {
+            //     if(err){
+            //         console.log("undefined error while getting notifications")
+            //     }
+            //     if(data.length == 0){
+            //         console.log("no notifications!");
+            //     }
+            //     const notific_s = data;
+            // })
+            // // Lấy thông tin giao dịch 
+            // const getPayments = 'SELECT * FROM payments WHERE `student_id` = ?';
+            // db.query(getPayments, [user_id], async(err,data) => {
+            //     if(err){
+            //         console.log("undefined error while getting payment infos")
+            //     }
+            //     if(data.length == 0){
+            //         console.log("no payment history!");
+            //     }
+            //     const payments = data;
+            // })
+            // // Lấy thông tin cá nhân
+            // const getPersonalInfo = 'SELECT * FROM personal WHERE `user_id` = ?';
+            // db.query(getPersonalInfo,[user_id], async(err, data) => {
+            //     if(err){
+            //         console.log("undefined error while getting personal info")
+            //     }
+            //     if(data.length == 0){
+            //         console.log("no infomation!");
+            //     }
+            //     const personalInfo = data;
+            // })
+            // user_data = [coursesEnrolled, notific_s, payments, personalInfo];
+
+
+            // console.log(user_data);
+            // // Cập nhật last_login
+            // const updateLastLoginSql = 'UPDATE users SET last_login = ? WHERE user_id = ?';
+            // db.query(updateLastLoginSql, [new Date(), user.user_id], (updateErr) => {
+            //     if (updateErr) {
+            //         return res.status(500).json({ message: "Lỗi server khi cập nhật thông tin đăng nhập" });
+            //     }
+            //     /* update respone when logging in */
+            //     return res.status(200).json({ message: "Đăng nhập thành công", token, user, user_data });
+            // });
         });
     } catch (error) {
         return res.status(500).json({ message: "Lỗi server" });

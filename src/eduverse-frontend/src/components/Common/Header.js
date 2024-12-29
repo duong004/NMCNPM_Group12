@@ -2,12 +2,13 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';  
 import logo from '../../assets/images/EduVerse_apose_1.svg'; 
-import { FaSearch, FaCaretDown, FaGlobe, FaUser, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
+import profileLogo from '../../assets/images/Footer-OrgLogo.jpg';
+import { FaSearch, FaCaretDown, FaGlobe, FaSignInAlt, FaUserPlus } from 'react-icons/fa'; // FaUser
 import './Header.css';
 import { AuthContext } from '../../contexts/AuthContext';
 
 const Header = () => {
-  const { isLoggedIn, userAvatar } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext); // userAvatar
   const [dropdownOpen, setDropdownOpen] = useState(false); // dropdown Khám phá
   const [languageOpen, setLanguageOpen] = useState(false); // dropdown ngôn ngữ
 
@@ -62,8 +63,8 @@ const Header = () => {
             <Link to="/register" className="header-btn"><FaUserPlus /> Đăng ký</Link>
           </>
         ) : (
-          <Link to="/profile">
-            <img src={userAvatar} alt="User Avatar" className="header-avatar" />
+          <Link to="/my-profile">
+            <img src={profileLogo} alt="User Avatar" className="header-avatar" />
           </Link>
         )}
 
