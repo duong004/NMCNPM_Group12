@@ -1,84 +1,15 @@
-// import React, { useEffect, useState } from 'react';
-// import useUser from '../contexts/userContext';
-// import axios from 'axios';
+
+import React, {useContext }  from 'react';
 import Header from '../components/Common/Header';
 import Footer from '../components/Common/Footer';
-
-// const ProfilePage = () => {
-//     const { user, setUser } = useUser();
-//     const [loading, setLoading] = useState(true);
-
-//     useEffect(() => {
-//         const fetchUserProfile = async () => {
-//             const token = localStorage.getItem('token');
-//             if (!token) {
-//                 setLoading(false);
-//                 return <div>Token is false.</div>;
-//             }
-//             try {
-//                 const response = await axios.get('http://localhost:5000/api/profile', {
-//                     headers: {
-//                         'Authorization': `Bearer ${localStorage.getItem('token')}`
-//                     }
-//                 });
-//                 setUser(response.data);
-//                 setLoading(false);
-//             } catch (error) {
-//                 console.error('Error fetching user profile:', error);
-//                 setLoading(false);
-//             }
-//         };
-
-//         fetchUserProfile();
-//     }, [setUser]);
-
-//     if (loading) {
-//         return <div>Loading...</div>;
-//     }
-
-//     if (!user) {
-//         return <div>Please log in to view your profile.</div>;
-//     }
-
-//     return (
-//         <div>
-//             <Header/>
-//             <h1>Profile Page</h1>
-//             <img src={user.avatar} alt="Avatar" />
-//             <h2>{user.name}</h2>
-//             <h3>Enrolled Courses:</h3>
-//             <ul>
-//                 {user.courses.map(course => (
-//                     <li key={course.id}>{course.name}</li>
-//                 ))}
-//             </ul>
-//             <Footer/>
-//         </div>
-//     );
-// };
-
-// export default ProfilePage;
-
-// src/pages/ProfilePage.js
-import React, { useEffect, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+import './ProfilePage.css';
+// import defaultAvatar from '../assets/images/default_user.jpg';
+// import logo from '../assets/images/Footer-OrgLogo.jpg';
 
 const ProfilePage = () => {
-    const [user, setUser] = useState(null);
-    const [personalInfo, setPersonalInfo] = useState(null);
-    useEffect(() => {
-        // Lấy thông tin người dùng từ localStorage
-        const storedUser = localStorage.getItem('user');
-        const storedPersonalInfo = localStorage.getItem('userData');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        if( storedPersonalInfo ) {
-            console.log(storedPersonalInfo);
-            setPersonalInfo(JSON.parse(storedPersonalInfo));
-        }
-    }, []);
-
-    if (!user) {
+    const {user, userInfo, userAvatar} = useContext(AuthContext);
+    if (!user || !userAvatar) {
         return <div>Loading...</div>;
     }
     const renderCourses = (courses) => {
@@ -109,41 +40,51 @@ const ProfilePage = () => {
         <div>
             <Header />
             <h1>Thông tin cá nhân</h1>
-            {personalInfo && personalInfo.personalInfo && (
+            {userInfo.personalInfo.length > 0  && (
                 <div>
-                    <img src={personalInfo.personalInfo[0].profile_picture} alt="Avatar" />
+                    <img src={userAvatar} alt="Avatar" className='profile-avatar' />
                     <p>Email: {user.email}</p>
-                    <p>Họ tên: {personalInfo.personalInfo[0].full_name}</p>
+                    <p>Họ tên: {userInfo.personalInfo[0].full_name}</p>
                     <p>Vai trò: {user.role}</p>
                     <p>Đã xác thực: {user.is_verified ? 'Có' : 'Không'}</p>
                     <p>Thời gian bắt đầu: {new Date(user.created_at).toLocaleString()}</p>
-                    <p>Phone: {personalInfo.personalInfo[0].phone}</p>
-                    <p>Address: {personalInfo.personalInfo[0].address}</p>
-                    <p>Highest Education: {personalInfo.personalInfo[0].highest_education}</p>
-                    <p>Date of Birth: {new Date(personalInfo.personalInfo[0].date_of_birth).toLocaleString()}</p>
-                    <p>Gender: {personalInfo.personalInfo[0].gender}</p>
-                    <p>Nationality: {personalInfo.personalInfo[0].nationality}</p>
-                    <p>Bio: {personalInfo.personalInfo[0].bio}</p>
+                    <p>Phone: {userInfo.personalInfo[0].phone}</p>
+                    <p>Address: {userInfo.personalInfo[0].address}</p>
+                    <p>Highest Education: {userInfo.personalInfo[0].highest_education}</p>
+                    <p>Date of Birth: {new Date(userInfo.personalInfo[0].date_of_birth).toLocaleString()}</p>
+                    <p>Gender: {userInfo.personalInfo[0].gender}</p>
+                    <p>Nationality: {userInfo.personalInfo[0].nationality}</p>
+                    <p>Bio: {userInfo.personalInfo[0].bio}</p>
                 </div>
             )}
-            {!personalInfo && <p>No additional personal info available.</p>}
+            {userInfo.personalInfo.length === 0 && (
+                <div>
+                    <img src={userAvatar} alt="Avatar" className='profile-avatar' />
+                    <p>Email: {user.email}</p>
+                    <p>Vai trò: {user.role}</p>
+                    <p>Đã xác thực: {user.is_verified ? 'Có' : 'Không'}</p>
+                    <p>Thời gian bắt đầu: {new Date(user.created_at).toLocaleString()}</p>
+                    <p>No additional personal info available.</p>
+                </div>
+                    
+            )}
 
             <div>
                 <h3>Enrolled Courses:</h3>
                 <ul>
-                    {personalInfo && renderCourses(personalInfo.coursesEnrolled)}
+                    {userInfo && renderCourses(userInfo.coursesEnrolled)}
                 </ul>
             </div>
             <div>
                 <h3>Notifications:</h3>
                 <ul>
-                    {personalInfo && renderNotifications(personalInfo.notifications)}
+                    {userInfo && renderNotifications(userInfo.notifications)}
                 </ul>
             </div>
             <div>
                 <h3>Payments:</h3>
                 <ul>
-                    {personalInfo && renderPayments(personalInfo.payments)}
+                    {userInfo && renderPayments(userInfo.payments)}
                 </ul>
             </div>
             <Footer />

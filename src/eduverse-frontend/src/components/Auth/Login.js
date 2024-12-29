@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import Validation from './LoginValidation';
 import axios from 'axios';
 import Header from '../../components/Common/Header';
-//import HomePage from '../../pages/HomePage';
 import './Login.css';
 
 const LoginPage = () => {
