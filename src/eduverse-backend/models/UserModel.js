@@ -1,57 +1,104 @@
-const connection = require('../config/db');
+// models/UserModel.js
+const db = require('../config/db');
 
-
-const getUserById = async (userId) => {
-    try {
-        const [rows] = await connection.query('SELECT * FROM users WHERE user_id = ?', [userId]);
-        if (rows.length === 0) {
-            throw new Error('User not found');
-        }
-        return rows[0];
-    } catch (error) {
-        throw new Error('Error getting user by id: ' + error.message);
-    }
+exports.getUserByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM users WHERE `email` = ?';
+        db.query(sql, [email], (err, data) => {
+            if (err) reject(err);
+            else resolve(data[0]);
+        });
+    });
 };
 
-const getUserByEmail = async (email) => {
-    try {
-        const [rows] = await connection.query('SELECT * FROM users WHERE email = ?', [email]);
-        if (rows.length === 0) {
-            throw new Error('User not found');
-        }
-        return rows[0];
-    } catch (error) {
-        throw new Error('Error getting user by email: ' + error.message);
-    }
+exports.getUserById = (userId) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM users WHERE `user_id` = ?';
+        db.query(sql, [userId], (err, data) => {
+            if (err) reject(err);
+            else resolve(data[0]);
+        });
+    });
 };
 
-
-
-const getAllUsers = async () => {
-    const [rows] = await connection.query('SELECT * FROM users');
-    return rows;
+exports.createUser = (userId, name, email, hashedPassword, role) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `role`) VALUES (?)';
+        const values = [userId, name, email, hashedPassword, role || 'Học viên'];
+        db.query(sql, [values], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
 };
 
-const createUser = async (user) => {
-    const { name, email, password} = user;
-    const [result] = await connection.query('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password]);
-    return result.insertId;
+exports.updateLastLogin = (userId) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE users SET last_login = ? WHERE user_id = ?';
+        db.query(sql, [new Date(), userId], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
 };
 
-const updateUser = async (userId, user) => {
-    const { name, email, password } = user;
-    await connection.query('UPDATE users SET name = ?, email = ?, password = ? WHERE user_id = ?', [name, email, password, userId]);
+exports.updateTokenReset = (userId, token) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE users SET token_reset = ? WHERE user_id = ?';
+        db.query(sql, [token, userId], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
 };
 
-const deleteUser = async (userId) => {
-    await connection.query('DELETE FROM users WHERE user_id = ?', [userId]);
+exports.resetPassword = (userId, hashedPassword) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE users SET password = ?, token_reset = NULL WHERE user_id = ?';
+        db.query(sql, [hashedPassword, userId], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
 };
 
-module.exports = {
-    getUserById,
-    getAllUsers,
-    createUser,
-    updateUser,
-    deleteUser,
-    getUserByEmail,
+// Các hàm lấy thông tin liên quan (courses, notifications, payments, personalInfo)
+exports.getCoursesEnrolled = (userId) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM enrollments WHERE `student_id` = ?';
+        db.query(sql, [userId], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
+};
+
+exports.getNotifications = (userId) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM notifications WHERE `user_id` = ?';
+        db.query(sql, [userId], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
+};
+
+exports.getPayments = (userId) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM payments WHERE `student_id` = ?';
+        db.query(sql, [userId], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
+};
+
+exports.getPersonalInfo = (userId) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM personal WHERE `user_id` = ?';
+        db.query(sql, [userId], (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+        });
+    });
 };
