@@ -1,0 +1,6 @@
+.profile-avatar {
+    width: 200px; /* Chiều rộng */
+    height: 200px; /* Chiều cao */
+    border-radius: 50%; /* Bo tròn */
+    cursor: pointer; /* Thay đổi con trỏ khi hover */
+}

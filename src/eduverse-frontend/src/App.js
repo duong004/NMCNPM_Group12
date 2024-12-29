@@ -20,13 +20,16 @@ import PasswordResetSuccessPage from './components/Auth/PasswordResetSuccess';
 import NotFoundPage from './pages/NotFoundPage';
 import MaintenancePage from './pages/MaintenancePage';
 import MyLearning from './pages/MyLearningPage';
+import ProfilePage from './pages/ProfilePage';
 import './App.css';
+
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/course/me/list" element={<MeListCoursesPage />} />
         <Route path="/course/list" element={<CoursesListPage />} />
         <Route path="/course/create" element={<CoursesCreatePage />} />
@@ -46,6 +49,8 @@ const App = () => {
         <Route path="/404" element={<NotFoundPage />} />
         <Route path="/offline" element={<MaintenancePage />} />
         <Route path="/my-learning" component={MyLearning} />
+        // context when logged in
+        <Route path="/my-profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );
