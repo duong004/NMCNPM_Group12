@@ -20,4 +20,5 @@ const upload = multer({ dest: 'uploads/' }); // Thư mục tạm để lưu tr�
 router.get('/materials/:lesson_id', materialController.getMaterialsByLesson);
 router.get('/materials/show/:material_id', materialController.getMaterial);
 router.post('/materials', upload.single('file'), materialController.createMaterial);
+router.put('/materials/update/:material_id', upload.single('file'), materialController.updateMaterial);
 module.exports = router;

@@ -43,18 +43,22 @@
 }
 
 /* Ảnh khóa học */
-.image {
-    width: 100%;
-    overflow: hidden;
+.course-card .image {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;    /* Center vertically */
+    overflow: hidden;       /* Hide overflow if the image is too large */
+    max-width: 100%;            /* Full width */
+    height: 200px;          /* Set a fixed height or adjust as needed */
+    position: relative;     /* Position relative for absolute positioning of img */
 }
 
 .course-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    max-width: 100%;        /* Limit width to 100% of the container */
+    max-height: 100%;       /* Limit height to 100% of the container */
+    object-fit: cover;      /* Maintain aspect ratio and cover the container */
+    display: block;         /* Remove any inline spacing */
 }
-
 /* Nội dung khóa học */
 .content {
     padding: 15px;

@@ -34,7 +34,8 @@ const MaterialShow = () => {
                 <iframe
                     width="560"
                     height="315"
-                    src="https://www.youtube.com/embed/IKEt2SSmyUE"
+                    // src="https://www.youtube.com/embed/IKEt2SSmyUE"
+                    src={material[0].content_url.startsWith("https://") ? material[0].content_url : "https://www.youtube.com/embed/IKEt2SSmyUE"}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
