@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './CourseCreate.css';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '../toast-message/toast-message'
 const SubmitCourseForm = () => {
@@ -36,7 +37,7 @@ const SubmitCourseForm = () => {
         // Gửi dữ liệu tới server API
         
         try {
-            const response = await axios.post('http://localhost:5000/api/courses/create', formData);
+            const response = await api.post('http://localhost:5000/api/courses/create', formData);
             
             console.log('Response:', response.data);
             // alert('Khóa học đã được gửi thành công!');

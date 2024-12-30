@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const assignmentController = require('../controllers/assignmentController');
-// const { authenticate } = require('../middlewares/authMiddleware');
+const { authenticate } = require('../middlewares/authMiddleware');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // Thư mục tạm để lưu trữ file trước khi upload lên Cloudinary
 
@@ -11,8 +11,8 @@ const upload = multer({ dest: 'uploads/' }); // Thư mục tạm để lưu tr�
 // router.put('/assignments/:assignment_id', authenticate, upload.array('files', 2), assignmentController.updateAssignment);
 // router.delete('/assignments/:assignment_id', authenticate, assignmentController.deleteAssignment);
 
-router.post('/assignments', upload.array('files', 2), assignmentController.createAssignment);
-router.get('/assignments/:lesson_id', assignmentController.getAssignmentsByLesson);
+router.post('/assignments', authenticate, upload.array('files', 2), assignmentController.createAssignment);
+router.get('/assignments/:lesson_id', authenticate, assignmentController.getAssignmentsByLesson);
 router.get('/assignments/show/:assignment_id', assignmentController.getAssignment);
 
 module.exports = router;

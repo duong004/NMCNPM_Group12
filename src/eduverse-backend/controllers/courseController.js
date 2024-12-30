@@ -10,10 +10,11 @@ const generateCourseId = (courseCount) => {
 // Tạo khóa học mới (Chỉ 'Giáo viên' mới được tạo course)
 exports.createCourse = (req, res) => {
     const { title, description, price, duration, category, cover_image, status } = req.body;
-    // const userRole = req.user.role; // Giả sử req.user chứa thông tin người dùng đã xác thực
-    // const teacher_id = req.user.user_id; 
-    const userRole = 'Giáo viên'; // Giả sử userRole đang đăng nhập là 'Giáo viên'
-    const teacher_id = 'U003'; // Giả sử teacher_id đang đăng nhập là 'U003'
+    const userRole = req.user.role; // Giả sử req.user chứa thông tin người dùng đã xác thực
+    const teacher_id = req.user.user_id; 
+    console.log(teacher_id);
+    // const userRole = 'Giáo viên'; // Giả sử userRole đang đăng nhập là 'Giáo viên'
+    // const teacher_id = 'U003'; // Giả sử teacher_id đang đăng nhập là 'U003'
 
     if (userRole !== 'Giáo viên') {
         return res.status(403).json({ message: "Chỉ Giáo viên mới được tạo khóa học" });
@@ -40,9 +41,9 @@ exports.createCourse = (req, res) => {
 
 //Lay ra danh sach khoa hoc ma nguoi GV da dang tai
 exports.listMeCourses = (req, res) => {
-    // const userId = req.user.user_id;
+    const userId = req.user.user_id;
     const sql = 'SELECT * FROM courses WHERE teacher_id = ?';
-    db.query(sql, 'U003', (err, results) => {
+    db.query(sql, userId, (err, results) => {
         if (err) {
             return res.status(500).json({ message: "Lỗi server" });
         }
@@ -77,7 +78,8 @@ exports.getCourseById = (req, res) => {
 exports.updateCourse = (req, res) => {
     const { course_id } = req.params;
     const { title, description, price, duration, category, cover_image, status } = req.body;
-    const userId = 'U003'; // Giả sử req.user chứa thông tin người dùng đã xác thực
+    // const userId = 'U003'; // Giả sử req.user chứa thông tin người dùng đã xác thực
+    const userId = req.user.user_id; // Giả sử req.user chứa thông tin người dùng đã xác thực
 
     // Kiểm tra quyền cập nhật
     const checkTeacherSql = 'SELECT teacher_id FROM courses WHERE course_id = ?';
