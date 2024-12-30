@@ -97,7 +97,12 @@ const CourseList = () => {
                 {currentCourses.map((course) => (
                     <div className="course-card" key={course.course_id}>
                         <div className="image">
-                            <img src={course.cover_image} alt="Khóa học" className="course-img" />
+                            <img src={course.cover_image} alt="Khóa học" className="course-img" 
+                                onError={(e) => {
+                                    e.target.onerror = null; // Prevents looping
+                                    e.target.src = 'https://soict.hust.edu.vn/wp-content/uploads/2019/05/a.jpg'; // Specify your fallback image path
+                                }}
+                            />
                         </div>
                         <div className="content">
                             <h3>{course.title}</h3>

@@ -77,7 +77,8 @@ exports.getCourseById = (req, res) => {
 exports.updateCourse = (req, res) => {
     const { id } = req.params;
     const { title, description, price, duration, category, cover_image, status } = req.body;
-    const userId = req.user.user_id; // Giả sử req.user chứa thông tin người dùng đã xác thực
+    // const userId = req.user.user_id; // Giả sử req.user chứa thông tin người dùng đã xác thực
+    const userId = 'U003'; // Giả sử userId đang đăng nhập là 'U003'
 
     // Kiểm tra quyền cập nhật
     const checkTeacherSql = 'SELECT teacher_id FROM courses WHERE course_id = ?';

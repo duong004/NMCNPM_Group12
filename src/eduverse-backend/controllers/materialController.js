@@ -116,7 +116,8 @@ exports.updateMaterial = async (req, res) => {
     try {
         const { material_id } = req.params;
         const { title, type } = req.body;
-        const userId = req.user.user_id;
+        // const userId = req.user.user_id;
+        const userId = 'U003';
         const file = req.file ? req.file.path : null;
 
         // Kiểm tra xem người dùng có phải là chủ khóa học không
