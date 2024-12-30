@@ -5,7 +5,6 @@ import { TbBookUpload } from "react-icons/tb";
 import { CiEdit } from "react-icons/ci";
 import { FaListUl } from "react-icons/fa6";
 import { MdPostAdd } from "react-icons/md";
-// import axios from 'axios';
 import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import './MeListCourses.css';

@@ -16,8 +16,6 @@ exports.createAssignment = async (req, res) => {
         const { lesson_id, title, description, due_date, points, max_attemps } = req.body;
         const userId = req.user.user_id;
         const userRole = req.user.role;
-        // const userId = 'U003';
-        // const userRole = 'Giáo viên';
         const files = req.files;
 
         // Kiểm tra xem người dùng có phải là chủ khóa học không
@@ -71,8 +69,6 @@ exports.getAssignmentsByLesson = async (req, res) => {
         const { lesson_id } = req.params;
         const userId = req.user.user_id;
         const userRole = req.user.role;
-        // const userId = 'U003';
-        // const userRole = 'Giáo viên';
 
         let sql;
         let values;

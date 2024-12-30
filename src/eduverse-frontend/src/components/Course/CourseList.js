@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaListUl } from "react-icons/fa6";
 import { LiaLaptopCodeSolid } from "react-icons/lia";
-// import axios from 'axios';
 import api from '../../api';
 import { Link } from 'react-router-dom';
 import './CourseList.css';

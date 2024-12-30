@@ -12,10 +12,8 @@ const generateLessonId = (lessonCount) => {
 exports.createLesson = async (req, res) => {
     try {
         const { course_id, title, content, lesson_order } = req.body;
-        const userId = req.user.user_id; // Giả sử req.user chứa thông tin người dùng đã xác thực
+        const userId = req.user.user_id; // req.user chứa thông tin người dùng đã xác thực
         const userRole = req.user.role;
-        // const userId = 'U003';
-        // const userRole = 'Giáo viên';
 
         // Kiểm tra xem người dùng có phải là chủ khóa học không
         const checkCourseSql = 'SELECT * FROM courses WHERE course_id = ? AND teacher_id = ?';

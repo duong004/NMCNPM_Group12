@@ -8,7 +8,7 @@ import { searchCourses } from './search'; // Import hàm tìm kiếm
 import { courses } from './courses'; // Import dữ liệu giả lập
 
 const Header = () => {
-  const { isLoggedIn, userAvatar, logout } = useContext(AuthContext); // Lấy setIsLoggedIn từ AuthContext
+  const { isLoggedIn, userAvatar, logout, userRole } = useContext(AuthContext); // Lấy setIsLoggedIn từ AuthContext
   const [dropdownOpen, setDropdownOpen] = useState(false); // dropdown Khám phá
   const [languageOpen, setLanguageOpen] = useState(false); // dropdown ngôn ngữ
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false); // dropdown Avatar
@@ -67,6 +67,8 @@ const Header = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  console.log(userRole);
 
   return (
     <header className="header">
@@ -138,7 +140,12 @@ const Header = () => {
             {avatarMenuOpen && (
               <div className="header-avatar-menu">
                 <Link to="/my-profile" className="header-avatar-menu-item"><FaUser /> Hồ sơ của tôi</Link>
-                <Link to="/my-courses" className="header-avatar-menu-item"><FaBook /> Khóa học của tôi</Link>
+                {(userRole === 'Học viên' || userRole === 'Giáo viên') && (
+                  <Link to="/course/me/list" className="header-avatar-menu-item"><FaBook /> Khóa học của tôi</Link>
+                )}
+                {(userRole === 'Quản trị viên') && (
+                  <Link to="/admin" className="header-avatar-menu-item">Trang quản trị</Link>
+                )}
                 <Link to="/transactions" className="header-avatar-menu-item"><FaWallet /> Giao dịch</Link>
                 {/* Thêm các mục khác nếu cần */}
                 <Link to="/settings" className="header-avatar-menu-item"><FaCog /> Cài đặt</Link>

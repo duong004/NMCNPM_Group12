@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FaListUl, FaVideo } from "react-icons/fa6";
 import { FaFileAlt } from "react-icons/fa";
-// import axios from 'axios';
 import api from '../../api';
 import { useNavigate, Link } from 'react-router-dom';
 import './LessonShow.css';
@@ -84,11 +83,11 @@ const LessonShow = () => {
         });
     };
 
-    const handleMaterialClick = (material, lesson) => {
-        if (material.type === 'Tài liệu') {
-            window.open(material.content_url, '_blank'); // Mở tài liệu trong tab mới
-        } else if (material.type === 'Video') {
-            navigate(`/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show?material_id=${material.material_id}`);
+    const handleMaterialClick = (material, lesson, action) => {
+        if (action === 'view') {
+            window.open(`https://docs.google.com/gview?url=${material.content_url}&embedded=true`, '_blank');
+        } else if (action === 'download') {
+            window.open(material.content_url, '_blank'); // Mở tài liệu trong tab mới để tải xuống
         }
     };
 
@@ -139,41 +138,29 @@ const LessonShow = () => {
                                         {isLoggedIn ? (
                                             materials[lesson.lesson_id]?.length > 0 ? (
                                                 materials[lesson.lesson_id].map((material) => (
-                                                    <div
-                                                        key={material.material_id}
-                                                        className="material-item"
-                                                        onClick={() => handleMaterialClick(material, lesson)}
-                                                    >
-                                                        <div className='material-item-content'>
+                                    <div key={material.material_id} className="material-item">
+                                    <div className='material-item-content'>
                                                             {material.type === 'Video' ? (
-                                                                <><FaVideo /> {material.title}</>
+                                    <><FaVideo /> {material.title}</>
                                                             ) : (
-                                                                <div className='material-item-content-container'>
-                                                                    <div className='material-item-content-item'>
-                                                                        <><FaFileAlt /> {material.title}</>
-                                                                    </div>
-                                                                    <div className='material-item-content-item'>
-                                                                        <Link to={{
-                                                                            pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
-                                                                            search: `?material_id=${material.material_id}`
-                                                                        }} 
-                                                                        className="show">Tải về</Link>
-                                                                        <Link to={{
-                                                                            pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
-                                                                            search: `?material_id=${material.material_id}`
-                                                                        }} 
-                                                                        className="show">Xem trước</Link>
-                                                                    </div>
-                                                                </div>
+                                    <div className='material-item-content-container'>
+                                    <div className='material-item-content-item'>
+                                    <><FaFileAlt /> {material.title}</>
+                                    </div>
+                                    <div className='material-item-content-item'>
+                                    <a href="#" onClick={() => handleMaterialClick(material, lesson, 'download')}>Tải về</a>
+                                    <a href="#" onClick={() => handleMaterialClick(material, lesson, 'view')}>Xem trước</a>
+                                    </div>
+                                    </div>
                                                             )}
-                                                        </div>
-                                                    </div>
+                                    </div>
+                                    </div>
                                                 ))
                                             ) : (
-                                                <p>Không có tài liệu nào.</p>
+                                    <p>Không có tài liệu nào.</p>
                                             )
                                         ) : (
-                                            <p>Vui lòng đăng nhập để xem danh sách tài liệu.</p>
+                                    <p>Vui lòng đăng nhập để xem danh sách tài liệu.</p>
                                         )}
                                     </div>
                                 </div>
