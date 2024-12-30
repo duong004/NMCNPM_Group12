@@ -6,7 +6,7 @@ import { FaSearch, FaCaretDown, FaGlobe, FaSignInAlt, FaUserPlus, FaSignOutAlt, 
 import { AuthContext } from '../../contexts/AuthContext';
 
 const Header = () => {
-  const { isLoggedIn, userAvatar, logout } = useContext(AuthContext); // Lấy setIsLoggedIn từ AuthContext
+  const { isLoggedIn, userAvatar, logout } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false); // dropdown Khám phá
   const [languageOpen, setLanguageOpen] = useState(false); // dropdown ngôn ngữ
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false); // dropdown Avatar
@@ -86,7 +86,7 @@ const Header = () => {
                 <Link to="/transactions" className="header-avatar-menu-item"><FaWallet /> Giao dịch</Link>
                 {/* Thêm các mục khác nếu cần */}
                 <Link to="/settings" className="header-avatar-menu-item"><FaCog /> Cài đặt</Link>
-                <button onClick={handleLogout} className="header-avatar-menu-item"><FaSignOutAlt /> Đăng xuất</button>
+                <Link onClick={handleLogout} className="header-avatar-menu-item"><FaSignOutAlt /> Đăng xuất</Link>
               </div>
             )}
           </div>
