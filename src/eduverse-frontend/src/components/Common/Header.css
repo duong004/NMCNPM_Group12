@@ -108,6 +108,7 @@
 
 /* Kết quả tìm kiếm */
 .header-search-results {
+  display: none;
   position: absolute; /* Định vị tuyệt đối dưới thanh tìm kiếm */
   top: 100%; /* Đặt ngay dưới thanh tìm kiếm */
   left: 0;
@@ -117,6 +118,11 @@
   z-index: 1; /* Đảm bảo kết quả tìm kiếm nằm trên các phần tử khác */
   max-height: 300px; /* Giới hạn chiều cao, thêm scroll nếu cần */
   overflow-y: auto; /* Cuộn khi vượt quá chiều cao */
+}
+
+.header-search-bar:focus-within .header-search-results,
+.header-search-bar.focus .header-search-results {
+  display: block; /* Hiển thị khi focus */
 }
 
 /* Nội dung của kết quả tìm kiếm */

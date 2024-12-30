@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import './Header.css';  
 import logo from '../../assets/images/EduVerse_apose_1.svg'; 
@@ -15,6 +15,8 @@ const Header = () => {
   //const [avatarDropdownOpen, setAvatarDropdownOpen] = useState(false); // State for avatar dropdown
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [searchOpen, setSearchOpen] = useState(false); // Trạng thái của hộp kết quả tìm kiếm
+  const searchRef = useRef(null); // Tham chiếu đến ô tìm kiếm
   const navigate = useNavigate(); 
 
   // Hàm để mở/tắt dropdown Khám phá
@@ -45,6 +47,26 @@ const Header = () => {
     const results = searchCourses(courses, searchQuery);
     setSearchResults(results);
   }, [searchQuery]);
+
+  // Hiển thị kết quả khi focus vào ô tìm kiếm
+  const handleFocus = () => {
+    setSearchOpen(true);
+  };
+
+  // Ẩn kết quả khi click ra ngoài
+  const handleClickOutside = (e) => {
+    if (searchRef.current && !searchRef.current.contains(e.target)) {
+      setSearchOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className="header">
@@ -77,7 +99,7 @@ const Header = () => {
         </div>
 
         {/* Khung tìm kiếm */}
-        <div className="header-search-bar">
+        <div className="header-search-bar" ref={searchRef}>
           <input type="text" placeholder="Tìm kiếm..." className="header-search-input" value={searchQuery} onChange={handleSearchChange} onKeyPress={handleKeyPress} />
           <button className="header-search-button" onClick={() => navigate(`/search?q=${searchQuery}`)}><FaSearch /></button>
           <div className="header-search-results">
