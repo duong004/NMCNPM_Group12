@@ -85,6 +85,8 @@ const Header = () => {
               <div className="header-avatar-dropdown">
                 <Link to="/my-profile" className="header-avatar-dropdown-item">Hồ sơ của tôi</Link>
                 {/* Thêm các mục khác nếu cần */}
+                <Link to="/course/list" className="header-avatar-dropdown-item">Danh sách các khóa học</Link>
+                <Link to="/course/me/list" className="header-avatar-dropdown-item">Khóa học đã đăng</Link>
                 <button onClick={handleLogout} className="header-avatar-dropdown-item">Đăng xuất</button>
               </div>
             )}

@@ -89,4 +89,16 @@ h2 {
     font-size: 18px;
 }
 
+.material-item-content-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
+.material-item-content-item .show{
+    color: #000;
+}
+
+.material-item-content-item .show:last-child{
+    margin-left: 10px;
+}
