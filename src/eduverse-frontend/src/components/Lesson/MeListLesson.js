@@ -142,12 +142,8 @@ const MeListLesson = () => {
                         <div key={doc.material_id} className="document-item">
                           <span>{doc.title}</span>
                           <div className="document-item-btn">
-                            <button
-                              className="btn-lesson"
-                              onClick={() => alert(`Sửa tài liệu: ${doc.title}`)}
-                            >
-                              Sửa
-                            </button>
+                            <button className="btn-lesson" onClick={() => navigate(`/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/update?material_id=${doc.material_id}`)}> Sửa</button>
+                            
                             <button
                               className="btn-lesson"
                               onClick={() => alert(`Xóa tài liệu: ${doc.title}`)}

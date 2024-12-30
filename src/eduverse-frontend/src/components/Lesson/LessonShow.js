@@ -142,7 +142,23 @@ const LessonShow = () => {
                                                         {material.type === 'Video' ? (
                                                             <><FaVideo /> {material.title}</>
                                                         ) : (
-                                                            <><FaFileAlt /> {material.title}</>
+                                                            <div className='material-item-content-container'>
+                                                                <div className='material-item-content-item'>
+                                                                    <><FaFileAlt /> {material.title}</>
+                                                                </div>
+                                                                <div className='material-item-content-item'>
+                                                                    <Link to={{
+                                                                        pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
+                                                                        search: `?material_id=${material.material_id}`
+                                                                    }} 
+                                                                    className="show">Tải về</Link>
+                                                                    <Link to={{
+                                                                        pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
+                                                                        search: `?material_id=${material.material_id}`
+                                                                    }} 
+                                                                    className="show">Xem trước</Link>
+                                                                </div>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </div>

@@ -229,22 +229,36 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  min-width: 150px;
-  text-align: left;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 10;
+  width: 200px;
 }
 
 .header-avatar-dropdown-item {
+  display: block;
   padding: 10px 15px;
   text-decoration: none;
-  display: block;
   color: black;
-  cursor: pointer;
+  transition: background 0.3s;
+  display: flex-start;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-avatar-dropdown-item:hover {
   background-color: #f1f1f1;
+}
+
+.header-avatar-dropdown button {
+  margin-left: 12px;
+  margin-bottom: 4px;
+  background-color: #5a0b55;
+  color: #fff;
+}
+
+.header-avatar-dropdown button:hover {
+  background-color: #820e7a;
 }

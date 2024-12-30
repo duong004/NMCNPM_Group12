@@ -82,7 +82,7 @@ const Header = () => {
             {avatarMenuOpen && (
               <div className="header-avatar-menu">
                 <Link to="/my-profile" className="header-avatar-menu-item"><FaUser /> Hồ sơ của tôi</Link>
-                <Link to="/my-courses" className="header-avatar-menu-item"><FaBook /> Khóa học của tôi</Link>
+                <Link to="/course/me/list" className="header-avatar-menu-item"><FaBook /> Khóa học của tôi</Link>
                 <Link to="/transactions" className="header-avatar-menu-item"><FaWallet /> Giao dịch</Link>
                 {/* Thêm các mục khác nếu cần */}
                 <Link to="/settings" className="header-avatar-menu-item"><FaCog /> Cài đặt</Link>
