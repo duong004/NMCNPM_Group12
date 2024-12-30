@@ -1,34 +1,24 @@
 // Xử lý logic cho các yêu cầu liên quan đến người dùng.
 
-const db = require('../config/db');
+const User = require('../models/User');
+const Personal = require('../models/Personal');
 
-exports.getUserProfile = (req, res) => {
-    //const userId = req.user.user_id;
-    const userId = 'U069'; // Bạn có thể lấy userId từ token giải mã
-    
-    const userQuery = 'SELECT * FROM users WHERE user_id = ?';
-    const personalQuery = 'SELECT * FROM personal WHERE user_id = ?';
-
-    db.query(userQuery, [userId], (err, userData) => {
-        if (err) return res.status(500).json({ message: 'Lỗi server' });
-        if (userData.length === 0) return res.status(404).json({ message: 'Người dùng không tồn tại' });
-
-        db.query(personalQuery, [userId], (err, personalData) => {
-            if (err) return res.status(500).json({ message: 'Lỗi server' });
-            if (personalData.length === 0) return res.status(404).json({ message: 'Thông tin cá nhân không tồn tại' });
-
-            const userProfile = { ...userData[0], ...personalData[0] };
-            console.log(userProfile);
-            return res.json(userProfile);
-        });
+exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.user_id, {
+      include: [Personal]
     });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-/*exports.updateUserProfile = async (req, res) => {
+exports.updateUserProfile = async (req, res) => {
   try {
     const user = await User.update(req.body, { where: { user_id: req.params.user_id } });
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};*/
+};

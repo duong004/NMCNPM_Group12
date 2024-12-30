@@ -4,13 +4,13 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
 exports.authenticate = (req, res, next) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    const token = req.header('Authorization').replace('Bearer ', '');
     if (!token) {
         return res.status(401).json({ message: "Không có token" });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, 'secret');
         const sql = 'SELECT * FROM users WHERE user_id = ?';
         db.query(sql, [decoded.id], (err, data) => {
             if (err) {
