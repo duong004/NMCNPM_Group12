@@ -21,6 +21,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import MaintenancePage from './pages/MaintenancePage';
 import MyLearning from './pages/MyLearningPage';
 import ProfilePage from './pages/ProfilePage';
+import SearchResults from './components/Common/SearchResults'; // Import trang kết quả tìm kiếm 
+import CourseDetail from './components/Course/CourseDetail'; // Import trang chi tiết khóa học
 import './App.css';
 
 
@@ -51,6 +53,8 @@ const App = () => {
         <Route path="/my-learning" component={MyLearning} />
         // context when logged in
         <Route path="/my-profile" element={<ProfilePage />} />
+        <Route path="/search" element={<SearchResults />} /> 
+        <Route path="/coursess/:id" element={<CourseDetail />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import './HeroSection.css';
-import coverImage from '../../assets/images/Tpbank.jpg';
+import coverImage from '../../assets/images/Home-Section.jpg';
 import { Link } from 'react-router-dom'
 
 const HeroSection = () => {

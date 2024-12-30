@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: space-between; /* Căn giữa các phần tử theo chiều ngang */
   height: 70px; /* Chiều cao của thanh công cụ */
+  position: relative; /* Định vị tương đối để chứa các kết quả tìm kiếm */
 }
 
 /* Logo */
@@ -75,11 +76,17 @@
 .header-search-bar {
   display: flex;
   align-items: center;
-  background-color: #e9e9e9; /* Nền xám nhạt */
-  border-radius: 20px; /* Bo tròn hai đầu */
-  padding: 5px 10px; /* Khoảng cách bên trong */
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient màu tím */
+  border-radius: 25px; /* Bo tròn hai đầu */
+  padding: 5px 15px; /* Khoảng cách bên trong */
   margin-right: auto; /* Đẩy các phần tử khác sang bên phải */
   margin-left: 30px; /* Khoảng cách từ nút tìm kiếm đến các phần tử bên cạnh */
+  position: relative; /* Định vị tương đối để chứa kết quả tìm kiếm */
+  transition: box-shadow 0.3s ease; /* Hiệu ứng đổ bóng khi focus */
+}
+
+.header-search-bar:focus-within {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Đổ bóng khi focus */
 }
 
 .header-search-input {
@@ -87,13 +94,88 @@
   outline: none; /* Loại bỏ viền khi focus */
   background: none; /* Nền trong suốt */
   padding: 5px; /* Khoảng cách bên trong */
-  width: 200px; /* Chiều rộng ô nhập */
+  width: 250px; /* Chiều rộng ô nhập lớn hơn */
+  color: white; /* Màu chữ trắng */
 }
 
 .header-search-button {
   background: none; /* Nền trong suốt */
   border: none; /* Loại bỏ viền */
   cursor: pointer; /* Thay đổi con trỏ khi hover */
+  color: white; /* Màu icon trắng */
+  font-size: 1.2rem; /* Kích thước icon lớn hơn */
+}
+
+/* Kết quả tìm kiếm */
+.header-search-results {
+  display: none;
+  position: absolute; /* Định vị tuyệt đối dưới thanh tìm kiếm */
+  top: 100%; /* Đặt ngay dưới thanh tìm kiếm */
+  left: 0;
+  right: 0;
+  background-color: white; /* Nền trắng */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+  z-index: 1; /* Đảm bảo kết quả tìm kiếm nằm trên các phần tử khác */
+  max-height: 300px; /* Giới hạn chiều cao, thêm scroll nếu cần */
+  overflow-y: auto; /* Cuộn khi vượt quá chiều cao */
+}
+
+.header-search-bar:focus-within .header-search-results,
+.header-search-bar.focus .header-search-results {
+  display: block; /* Hiển thị khi focus */
+}
+
+/* Nội dung của kết quả tìm kiếm */
+.header-search-results ul {
+  list-style: none; /* Loại bỏ bullet points */
+  padding: 0; /* Loại bỏ padding */
+  margin: 0; /* Loại bỏ margin */
+}
+
+.header-search-results li {
+  padding: 10px; /* Khoảng cách bên trong */
+  border-bottom: 1px solid #ddd; /* Đường viền dưới */
+}
+
+.header-search-results li:hover {
+  background-color: #f9f9f9; /* Nền màu xám nhạt khi hover */
+}
+
+.header-search-results h3 {
+  margin: 0 0 5px 0; /* Khoảng cách dưới */
+  color: #333; /* Màu chữ */
+}
+
+.header-search-results p {
+  margin: 0; /* Loại bỏ margin */
+  color: #666; /* Màu chữ xám */
+}
+
+/* Thêm phong cách cho kết quả tìm kiếm */
+.header-search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 10px; /* Khoảng cách bên trong */
+  border-bottom: 1px solid #ddd; /* Đường viền dưới */
+}
+
+.header-search-result-image {
+  width: 50px; /* Chiều rộng của hình ảnh */
+  height: 50px; /* Chiều cao của hình ảnh */
+  margin-right: 10px; /* Khoảng cách giữa hình ảnh và thông tin khóa học */
+}
+
+.header-search-result-info {
+  display: flex;
+  flex-direction: column; /* Sắp xếp theo chiều dọc */
+}
+
+.header-no-search-results {
+  padding: 10px; /* Khoảng cách bên trong */
+  color: #666; /* Màu chữ xám */
+  background-color: #f9f9f9; /* Nền màu xám nhạt */
+  border-radius: 4px; /* Bo góc */
+  text-align: center; /* Căn giữa nội dung */
 }
 
 /* Nút Đăng nhập và Đăng ký */
@@ -117,58 +199,69 @@
 
 /* Ảnh đại diện của người dùng */
 .header-avatar {
-  width: 40px; /* Chiều rộng */
-  height: 40px; /* Chiều cao */
+  width: 45px; /* Chiều rộng lớn hơn */
+  height: 45px; /* Chiều cao lớn hơn */
   border-radius: 50%; /* Bo tròn */
   cursor: pointer; /* Thay đổi con trỏ khi hover */
+  border: 3px solid rgba(255, 255, 255, 0.7); /* Viền trắng đậm */
+  transition: border-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển tiếp cho viền và phóng to */
+  margin-right: 20px; /* Thêm khoảng cách giữa avatar và nút ngôn ngữ */
+}
+
+.header-avatar:hover {
+  border-color: #fff; /* Đổi màu viền khi hover */
+  transform: scale(1.1); /* Phóng to khi hover */
 }
 
 /* Dropdown chọn ngôn ngữ */
 .header-language-dropdown {
-  position: relative;
+  position: relative; /* Định vị tương đối */
 }
 
 .header-language-button {
-  background: none; /* Nền trong suốt */
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient màu tím */
   border: none; /* Loại bỏ viền */
   cursor: pointer; /* Thay đổi con trỏ khi hover */
   font-size: 1.5rem; /* Kích thước font chữ */
+  color: white; /* Màu chữ trắng */
+  padding: 5px 10px; /* Khoảng cách bên trong */
+  border-radius: 50%; /* Bo tròn */
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng chuyển tiếp cho nền và đổ bóng */
+}
+
+.header-language-button:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Đổi màu nền khi hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ khi hover */
 }
 
 /* Nội dung dropdown ngôn ngữ */
 .header-language-content {
   position: absolute; /* Định vị tuyệt đối dưới nút ngôn ngữ */
-  background-color: white; /* Nền trắng */
+  background-color: #fff; /* Nền trắng */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Đổ bóng */
   z-index: 1; /* Đảm bảo dropdown nằm trên các phần tử khác */
   top: 100%; /* Đặt dưới nút ngôn ngữ */
   right: 0; /* Canh phải */
+  border-radius: 8px; /* Bo tròn */
 }
 
 /* Từng mục trong dropdown ngôn ngữ */
 .header-language-option {
   padding: 10px; /* Khoảng cách bên trong */
+  transition: background-color 0.3s ease; /* Hiệu ứng chuyển tiếp cho nền */
 }
 
 .header-language-option:hover {
   background-color: #f1f1f1; /* Nền màu xám nhạt khi hover */
 }
 
+/* Phần dành cho người dùng */
 .header-user-section {
   position: relative;
   cursor: pointer;
-}
-
-.header-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid #ddd;
-  transition: border-color 0.3s ease;
-}
-
-.header-avatar:hover {
-  border-color: #aaa;
 }
 
 .header-avatar-menu {
@@ -218,8 +311,7 @@
   border-bottom: 1px solid #eee;
 }
 
-
-/* avatar và dropdown */
+/* Avatar và dropdown */
 .header-avatar-container {
   position: relative;
   display: inline-block;

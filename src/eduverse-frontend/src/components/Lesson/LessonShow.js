@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FaListUl, FaVideo } from "react-icons/fa6";
 import { FaFileAlt } from "react-icons/fa";
 // import axios from 'axios';
 import api from '../../api';
 import { useNavigate, Link } from 'react-router-dom';
 import './LessonShow.css';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const LessonShow = () => {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ const LessonShow = () => {
     const [materials, setMaterials] = useState({});
     const [assignments, setAssignments] = useState({});
     const [expandedLessons, setExpandedLessons] = useState([]);
+    const { isLoggedIn } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchLessons = async () => {
@@ -84,7 +86,7 @@ const LessonShow = () => {
 
     const handleMaterialClick = (material, lesson) => {
         if (material.type === 'Tài liệu') {
-            window.location.href = material.content_url; // Tải xuống tài liệu
+            window.open(material.content_url, '_blank'); // Mở tài liệu trong tab mới
         } else if (material.type === 'Video') {
             navigate(`/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show?material_id=${material.material_id}`);
         }
@@ -112,60 +114,66 @@ const LessonShow = () => {
                                 <div>
                                     <div className="assignment-list">
                                     <h2>Danh sách bài tập</h2>
-                                        {assignments[lesson.lesson_id]?.length > 0 ? (
-                                            assignments[lesson.lesson_id].map((assignment) => (
-                                                <div
-                                                    key={assignment.assignment_id}
-                                                    className="assignment-item"
-                                                >
-                                                    <div className='assignment-item-content'>
-                                                        <Link to={{
-                                                            pathname: `/assignment/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
-                                                            search: `?assignment_id=${assignment.assignment_id}`
-                                                        }}> 
-                                                            {assignment.title}</Link>
+                                        {isLoggedIn ? (
+                                            assignments[lesson.lesson_id]?.length > 0 ? (
+                                                assignments[lesson.lesson_id].map((assignment) => (
+                                                    <div key={assignment.assignment_id} className="assignment-item">
+                                                        <div className='assignment-item-content'>
+                                                            <Link to={{
+                                                                pathname: `/assignment/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
+                                                                search: `?assignment_id=${assignment.assignment_id}`
+                                                            }}>
+                                                                {assignment.title}
+                                                            </Link>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))
+                                                ))
+                                            ) : (
+                                                <p>Không có bài tập nào.</p>
+                                            )
                                         ) : (
-                                            <p>Không có tài liệu nào.</p>
+                                            <p>Vui lòng đăng nhập để xem danh sách bài tập.</p>
                                         )}
                                     </div>
                                     <div className="materials-list">
-                                        {materials[lesson.lesson_id]?.length > 0 ? (
-                                            materials[lesson.lesson_id].map((material) => (
-                                                <div
-                                                    key={material.material_id}
-                                                    className="material-item"
-                                                    onClick={() => handleMaterialClick(material, lesson)}
-                                                >
-                                                    <div className='material-item-content'>
-                                                        {material.type === 'Video' ? (
-                                                            <><FaVideo /> {material.title}</>
-                                                        ) : (
-                                                            <div className='material-item-content-container'>
-                                                                <div className='material-item-content-item'>
-                                                                    <><FaFileAlt /> {material.title}</>
+                                        {isLoggedIn ? (
+                                            materials[lesson.lesson_id]?.length > 0 ? (
+                                                materials[lesson.lesson_id].map((material) => (
+                                                    <div
+                                                        key={material.material_id}
+                                                        className="material-item"
+                                                        onClick={() => handleMaterialClick(material, lesson)}
+                                                    >
+                                                        <div className='material-item-content'>
+                                                            {material.type === 'Video' ? (
+                                                                <><FaVideo /> {material.title}</>
+                                                            ) : (
+                                                                <div className='material-item-content-container'>
+                                                                    <div className='material-item-content-item'>
+                                                                        <><FaFileAlt /> {material.title}</>
+                                                                    </div>
+                                                                    <div className='material-item-content-item'>
+                                                                        <Link to={{
+                                                                            pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
+                                                                            search: `?material_id=${material.material_id}`
+                                                                        }} 
+                                                                        className="show">Tải về</Link>
+                                                                        <Link to={{
+                                                                            pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
+                                                                            search: `?material_id=${material.material_id}`
+                                                                        }} 
+                                                                        className="show">Xem trước</Link>
+                                                                    </div>
                                                                 </div>
-                                                                <div className='material-item-content-item'>
-                                                                    <Link to={{
-                                                                        pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
-                                                                        search: `?material_id=${material.material_id}`
-                                                                    }} 
-                                                                    className="show">Tải về</Link>
-                                                                    <Link to={{
-                                                                        pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
-                                                                        search: `?material_id=${material.material_id}`
-                                                                    }} 
-                                                                    className="show">Xem trước</Link>
-                                                                </div>
-                                                            </div>
-                                                        )}
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))
+                                                ))
+                                            ) : (
+                                                <p>Không có tài liệu nào.</p>
+                                            )
                                         ) : (
-                                            <p>Không có tài liệu nào.</p>
+                                            <p>Vui lòng đăng nhập để xem danh sách tài liệu.</p>
                                         )}
                                     </div>
                                 </div>
