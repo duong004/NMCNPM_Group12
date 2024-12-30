@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import './AssignmentShow.css';
 
 const AssignmentShow = () => {
@@ -13,7 +13,7 @@ const AssignmentShow = () => {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const assignmentId = urlParams.get("assignment_id");
-                const response = await axios.get(`http://localhost:5000/api/assignments/assignments/show/${assignmentId}`);
+                const response = await api.get(`http://localhost:5000/api/assignments/assignments/show/${assignmentId}`);
                 setAssignment(response.data); // Giả sử API trả về một đối tượng assignment
             } catch (err) {
                 console.error("Error fetching assignment details:", err);
@@ -46,7 +46,7 @@ const AssignmentShow = () => {
             formData.append("assignment_id", assignmentId);
 
             // Gửi request đến API nộp bài
-            const response = await axios.post(`http://localhost:5000/api/assignments/assignments`, formData, {
+            const response = await api.post(`http://localhost:5000/api/assignments/assignments`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 

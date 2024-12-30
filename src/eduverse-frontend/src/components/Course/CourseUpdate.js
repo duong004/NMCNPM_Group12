@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CourseUpdate.css';
-import axios from 'axios';
+import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '../toast-message/toast-message'
 const CourseUpdate = () => {
@@ -21,7 +21,7 @@ const CourseUpdate = () => {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const courseId = urlParams.get('course_id');
-                const response = await axios.get(`http://localhost:5000/api/courses/detail/${courseId}`);
+                const response = await api.get(`http://localhost:5000/api/courses/detail/${courseId}`);
                 // Kiểm tra nếu response trả về mảng
                 const courseData = Array.isArray(response.data) ? response.data[0] : response.data;
                 setFormData(courseData); // Đổ dữ liệu vào formData
@@ -53,7 +53,7 @@ const CourseUpdate = () => {
         try {
             const urlParams = new URLSearchParams(window.location.search);
             const courseId = urlParams.get('course_id');
-            const response = await axios.put(`http://localhost:5000/api/courses/update/${courseId}`, formData);
+            const response = await api.put(`http://localhost:5000/api/courses/update/${courseId}`, formData);
             
             console.log('Response:', response.data);
             // alert('Khóa học đã được gửi thành công!');

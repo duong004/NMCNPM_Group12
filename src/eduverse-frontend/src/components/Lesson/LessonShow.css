@@ -102,3 +102,8 @@ h2 {
 .material-item-content-item .show:last-child{
     margin-left: 10px;
 }
+
+.material-item-content-item a {
+    color: #000;
+    margin-right: 6px;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import './MaterialCreate.css';
 import { toast } from '../toast-message/toast-message'
@@ -57,7 +57,7 @@ const MaterialCreate = () => {
             // Thêm file
             fileData.append('file', file);
 
-            const response = await axios.post('http://localhost:5000/api/materials/materials', fileData);
+            const response = await api.post('http://localhost:5000/api/materials/materials', fileData);
 
             console.log('Response:', response.data);
             // alert('Tài liệu đã được thêm thành công!');

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from '../../api';
 import { useNavigate } from "react-router-dom";
 import "./MeListLesson.css";
 
@@ -15,7 +15,7 @@ const MeListLesson = () => {
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const courseId = urlParams.get("course_id");
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:5000/api/lessons/lessons/${courseId}`
         );
         setLessons(response.data);
@@ -28,7 +28,7 @@ const MeListLesson = () => {
 
   const fetchDocuments = async (lessonId) => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `http://localhost:5000/api/materials/materials/${lessonId}`
       );
       setMaterials((prev) => ({
@@ -42,7 +42,7 @@ const MeListLesson = () => {
 
   const fetchAssignments = async (lessonId) => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `http://localhost:5000/api/assignments/assignments/${lessonId}`
       );
       setAssignments((prev) => ({

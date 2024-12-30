@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import './LessonCreate.css';
 import { toast } from '../toast-message/toast-message'
@@ -20,7 +20,7 @@ const SubmitLessonForm = () => {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const courseId = urlParams.get('course_id');
-                const response = await axios.get('http://localhost:5000/api/lessons/total', {
+                const response = await api.get('http://localhost:5000/api/lessons/total', {
                     params: { course_id: courseId}
                 });
                 setTotalLessons(response.data.totalLessons || 0);
@@ -55,7 +55,7 @@ const SubmitLessonForm = () => {
         const courseId = urlParams.get('course_id');
 
         try {
-            const response = await axios.post('http://localhost:5000/api/lessons/create', {
+            const response = await api.post('http://localhost:5000/api/lessons/create', {
                 ...formData,
                 lesson_order: totalLessons + 1, // Tăng số bài học lên 1
                 course_id: courseId,

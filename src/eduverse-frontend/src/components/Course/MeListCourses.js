@@ -5,7 +5,7 @@ import { TbBookUpload } from "react-icons/tb";
 import { CiEdit } from "react-icons/ci";
 import { FaListUl } from "react-icons/fa6";
 import { MdPostAdd } from "react-icons/md";
-import axios from 'axios';
+import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import './MeListCourses.css';
 
@@ -17,7 +17,7 @@ const UserCourses = () => {
         // Gọi API để lấy danh sách khóa học của user
         const fetchCourses = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/courses/me/list`);
+                const response = await api.get(`http://localhost:5000/api/courses/me/list`);
                 setCourses(response.data);
             } catch (error) {
                 console.error('Lỗi khi lấy danh sách khóa học:', error);

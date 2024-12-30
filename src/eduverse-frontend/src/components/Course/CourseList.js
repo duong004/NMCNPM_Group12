@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaListUl } from "react-icons/fa6";
 import { LiaLaptopCodeSolid } from "react-icons/lia";
-import axios from 'axios';
+import api from '../../api';
 import { Link } from 'react-router-dom';
 import './CourseList.css';
 
@@ -13,7 +13,7 @@ const CourseList = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/courses/list');
+                const response = await api.get('http://localhost:5000/api/courses/list');
                 setCourses(response.data);
             } catch (error) {
                 console.error('Lỗi khi lấy dữ liệu:', error);
