@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [userAvatar, setUserAvatar] = useState(defaultAvatar);
+  const [userRole, setUserRole] = useState(null);
   useEffect(() => {
     // Kiểm tra xem có thông tin người dùng trong localStorage hay không
     const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -15,6 +16,8 @@ export const AuthProvider = ({ children }) => {
     if (storedUser) {
       setIsLoggedIn(storedUser);
       setUser(storedUser);
+      const role = storedUser.role;
+      setUserRole(role);
     }
     if (storedUserInfo){
       setUserInfo(storedUserInfo);
@@ -27,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, userInfo, setUserInfo, userAvatar, setUserAvatar }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, userInfo, setUserInfo, userAvatar, setUserAvatar, userRole, setUserRole }}>
       {children}
     </AuthContext.Provider>
   );

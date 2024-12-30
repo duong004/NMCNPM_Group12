@@ -6,7 +6,7 @@ import { FaSearch, FaCaretDown, FaGlobe, FaSignInAlt, FaUserPlus } from 'react-i
 import { AuthContext } from '../../contexts/AuthContext';
 
 const Header = () => {
-  const { isLoggedIn, userAvatar, setIsLoggedIn } = useContext(AuthContext); // Lấy setIsLoggedIn từ AuthContext
+  const { isLoggedIn, userAvatar, setIsLoggedIn, userRole } = useContext(AuthContext); // Lấy setIsLoggedIn từ AuthContext
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [avatarDropdownOpen, setAvatarDropdownOpen] = useState(false); // State for avatar dropdown
@@ -86,7 +86,10 @@ const Header = () => {
                 <Link to="/my-profile" className="header-avatar-dropdown-item">Hồ sơ của tôi</Link>
                 {/* Thêm các mục khác nếu cần */}
                 <Link to="/course/list" className="header-avatar-dropdown-item">Danh sách các khóa học</Link>
-                <Link to="/course/me/list" className="header-avatar-dropdown-item">Khóa học đã đăng</Link>
+                {/* Kiểm tra role trước khi hiển thị liên kết */}
+                {(userRole === 'Giáo viên' || userRole === 'Quản trị viên') && (
+                  <Link to="/course/me/list" className="header-avatar-dropdown-item">Khóa học đã đăng</Link>
+                )}
                 <button onClick={handleLogout} className="header-avatar-dropdown-item">Đăng xuất</button>
               </div>
             )}
