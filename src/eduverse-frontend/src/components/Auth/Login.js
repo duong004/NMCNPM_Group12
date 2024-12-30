@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Validation from './LoginValidation';
 import axios from 'axios';
 import Header from '../../components/Common/Header';
+import { AuthContext } from '../../contexts/AuthContext';
 import './Login.css';
 
 const LoginPage = () => {
@@ -12,6 +13,7 @@ const LoginPage = () => {
     });
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
+    const { login } = useContext(AuthContext);
 
     const handleInput = (e) => {
         setValues(prev => ({...prev, [e.target.name]: e.target.value}));
@@ -28,11 +30,8 @@ const LoginPage = () => {
                 const res = await axios.post('http://localhost:5000/api/auth/login', values);
                 console.log("Response from API:", res.data.message);
                 if (res.data.message === "Đăng nhập thành công") {
-                    localStorage.setItem('token', res.data.token);
-                    console.log("save data user to LocalStorage");
-                    localStorage.setItem('user', JSON.stringify(res.data.user));
-                    localStorage.setItem('userData', JSON.stringify(res.data.userData));
-                    navigate('/my-profile');
+                    login(res.data.user, res.data.userData, res.data.token); // Sử dụng hàm login từ AuthContext
+                    navigate('/');
                 } else {
                     alert(res.data.message);
                 }
