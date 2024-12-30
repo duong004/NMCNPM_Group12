@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../api';
 import './MaterialUpdate.css';
 import { toast } from '../toast-message/toast-message';
 
@@ -18,7 +19,7 @@ const MaterialUpdate = () => {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const materialId = urlParams.get('material_id');
-                const response = await axios.get(`http://localhost:5000/api/materials/materials/show/${materialId}`);
+                const response = await api.get(`http://localhost:5000/api/materials/materials/show/${materialId}`);
                 const materialData = Array.isArray(response.data) ? response.data[0] : response.data;
                 setFormData(materialData); // Đổ dữ liệu vào formData
             } catch (error) {
@@ -57,7 +58,7 @@ const MaterialUpdate = () => {
         if (file) formDataToSend.append('file', file);
 
         try {
-            await axios.put(`http://localhost:5000/api/materials/materials/update/${materialId}`, formDataToSend);
+            await api.put(`http://localhost:5000/api/materials/materials/update/${materialId}`, formDataToSend);
 
             toast({
                 title: 'Thành công!',

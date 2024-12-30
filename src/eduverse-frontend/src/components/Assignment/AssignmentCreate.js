@@ -1,6 +1,7 @@
 import './AssignmentCreate.css';
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '../toast-message/toast-message';
 
@@ -54,7 +55,7 @@ const AssignmentCreate = () => {
                 fileData.append('files', file); // Thêm tất cả các tệp
             });
 
-            const response = await axios.post('http://localhost:5000/api/assignments/assignments', fileData);
+            const response = await api.post('http://localhost:5000/api/assignments/assignments', fileData);
             console.log('Response:', response.data);
             toast({
                 title: "Thành công!",

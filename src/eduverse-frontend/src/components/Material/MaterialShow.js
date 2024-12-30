@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../api';
 import './MaterialShow.css';
 
 const MaterialShow = () => {
@@ -8,7 +9,7 @@ const MaterialShow = () => {
     const fetchMaterial = async () => {
         try {
             const materialId = new URLSearchParams(window.location.search).get('material_id');
-            const response = await axios.get(`http://localhost:5000/api/materials/materials/show/${materialId}`);
+            const response = await api.get(`http://localhost:5000/api/materials/materials/show/${materialId}`);
             setMaterial(response.data);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu tài liệu:', error);

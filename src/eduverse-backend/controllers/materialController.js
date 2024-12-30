@@ -14,10 +14,10 @@ const generateMaterialId = (materialCount) => {
 exports.createMaterial = async (req, res) => {
     try {
         const { lesson_id, title, type } = req.body;
-        // const userId = req.user.user_id;
-        // const userRole = req.user.role;
-        const userId = 'U003';
-        const userRole = 'Giáo viên';
+        const userId = req.user.user_id;
+        const userRole = req.user.role;
+        // const userId = 'U003';
+        // const userRole = 'Giáo viên';
         const file = req.file.path;
 
         // Kiểm tra xem người dùng có phải là chủ khóa học không
@@ -60,10 +60,10 @@ exports.createMaterial = async (req, res) => {
 exports.getMaterialsByLesson = async (req, res) => {
   try {
       const { lesson_id } = req.params;
-        //   const userId = req.user.user_id;
-        //   const userRole = req.user.role;
-      const userId = 'U003';
-      const userRole = 'Giáo viên';
+    const userId = req.user.user_id;
+    const userRole = req.user.role;
+    //   const userId = 'U003';
+    //   const userRole = 'Giáo viên';
 
       let sql;
       let values;
@@ -116,8 +116,8 @@ exports.updateMaterial = async (req, res) => {
     try {
         const { material_id } = req.params;
         const { title, type } = req.body;
-        // const userId = req.user.user_id;
-        const userId = 'U003';
+        const userId = req.user.user_id;
+        // const userId = 'U003';
         const file = req.file ? req.file.path : null;
 
         // Kiểm tra xem người dùng có phải là chủ khóa học không

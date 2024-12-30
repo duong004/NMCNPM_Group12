@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const materialController = require('../controllers/materialController');
-// const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // Thư mục tạm để lưu trữ file trước khi upload lên Cloudinary
 
@@ -17,8 +17,8 @@ const upload = multer({ dest: 'uploads/' }); // Thư mục tạm để lưu tr�
 
 // // Xóa tài liệu (Giáo viên)
 // router.delete('/materials/:material_id', authMiddleware.authenticate, materialController.deleteMaterial);
-router.get('/materials/:lesson_id', materialController.getMaterialsByLesson);
+router.get('/materials/:lesson_id', authMiddleware.authenticate, materialController.getMaterialsByLesson);
 router.get('/materials/show/:material_id', materialController.getMaterial);
-router.post('/materials', upload.single('file'), materialController.createMaterial);
-router.put('/materials/update/:material_id', upload.single('file'), materialController.updateMaterial);
+router.post('/materials', upload.single('file'), authMiddleware.authenticate, materialController.createMaterial);
+router.put('/materials/update/:material_id', upload.single('file'), authMiddleware.authenticate, materialController.updateMaterial);
 module.exports = router;
