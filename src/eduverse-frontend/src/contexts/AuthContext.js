@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import defaultAvatar from '../assets/images/default_user.jpg';
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -7,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [userAvatar, setUserAvatar] = useState(defaultAvatar);
+
   useEffect(() => {
     // Kiểm tra xem có thông tin người dùng trong localStorage hay không
     const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -26,8 +28,33 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const logout = () => {
+    // Xóa các thông tin khỏi localStorage
+    localStorage.removeItem('user');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('token');
+
+    // Cập nhật trạng thái đăng nhập
+    setIsLoggedIn(false);
+  };
+
+  const login = (user, userData, token) => {
+    // Cập nhật localStorage với thông tin đăng nhập
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    // Cập nhật trạng thái đăng nhập
+    setIsLoggedIn(true);
+    setUser(user);
+    setUserInfo(userData);
+    const profilePicture = userData.personalInfo?.[0]?.profile_picture;
+    const avatar = profilePicture ? profilePicture : defaultAvatar; 
+    setUserAvatar(avatar);
+  };
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, userInfo, setUserInfo, userAvatar, setUserAvatar }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, userInfo, setUserInfo, userAvatar, setUserAvatar, logout, login }}>
       {children}
     </AuthContext.Provider>
   );

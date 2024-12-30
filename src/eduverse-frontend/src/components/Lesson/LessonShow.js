@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaListUl, FaVideo } from "react-icons/fa6";
 import { FaFileAlt } from "react-icons/fa";
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../api';
 import { useNavigate, Link } from 'react-router-dom';
 import './LessonShow.css';
 
@@ -17,7 +18,7 @@ const LessonShow = () => {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const courseId = urlParams.get("course_id");
-                const response = await axios.get(
+                const response = await api.get(
                     `http://localhost:5000/api/lessons/lessons/${courseId}`
                 );
                 setLessons(response.data);
@@ -34,7 +35,7 @@ const LessonShow = () => {
             try {
                 const materialsData = {};
                 for (const lesson of lessons) {
-                    const response = await axios.get(
+                    const response = await api.get(
                         `http://localhost:5000/api/materials/materials/${lesson.lesson_id}`
                     );
                     materialsData[lesson.lesson_id] = response.data;
@@ -55,7 +56,7 @@ const LessonShow = () => {
             try {
                 const assignmentsData = {};
                 for (const lesson of lessons) {
-                    const response = await axios.get(
+                    const response = await api.get(
                         `http://localhost:5000/api/assignments/assignments/${lesson.lesson_id}`
                     );
                     assignmentsData[lesson.lesson_id] = response.data;
@@ -142,7 +143,23 @@ const LessonShow = () => {
                                                         {material.type === 'Video' ? (
                                                             <><FaVideo /> {material.title}</>
                                                         ) : (
-                                                            <><FaFileAlt /> {material.title}</>
+                                                            <div className='material-item-content-container'>
+                                                                <div className='material-item-content-item'>
+                                                                    <><FaFileAlt /> {material.title}</>
+                                                                </div>
+                                                                <div className='material-item-content-item'>
+                                                                    <Link to={{
+                                                                        pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
+                                                                        search: `?material_id=${material.material_id}`
+                                                                    }} 
+                                                                    className="show">Tải về</Link>
+                                                                    <Link to={{
+                                                                        pathname: `/material/${lesson.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/show`,
+                                                                        search: `?material_id=${material.material_id}`
+                                                                    }} 
+                                                                    className="show">Xem trước</Link>
+                                                                </div>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </div>

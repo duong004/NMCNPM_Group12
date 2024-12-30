@@ -5,7 +5,8 @@ import { TbBookUpload } from "react-icons/tb";
 import { CiEdit } from "react-icons/ci";
 import { FaListUl } from "react-icons/fa6";
 import { MdPostAdd } from "react-icons/md";
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import './MeListCourses.css';
 
@@ -17,7 +18,7 @@ const UserCourses = () => {
         // Gọi API để lấy danh sách khóa học của user
         const fetchCourses = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/courses/me/list`);
+                const response = await api.get(`http://localhost:5000/api/courses/me/list`);
                 setCourses(response.data);
             } catch (error) {
                 console.error('Lỗi khi lấy danh sách khóa học:', error);
@@ -38,7 +39,12 @@ const UserCourses = () => {
                 <div className="course-list">
                     {courses.map((course) => (
                         <div className="course-item" key={course.course_id}>
-                            <img src={course.cover_image} alt={course.title} className="course-image" />
+                            <img src={course.cover_image} alt={course.title} className="course-image" 
+                                onError={(e) => {
+                                    e.target.onerror = null; // Prevents looping
+                                    e.target.src = 'https://soict.hust.edu.vn/wp-content/uploads/2019/05/a.jpg'; // Specify your fallback image path
+                                }}
+                            />
                             <div className="course-info">
                                 <h3>{course.title}</h3>
                                 <p>{course.description}</p>
@@ -56,7 +62,7 @@ const UserCourses = () => {
                                         `/lesson/${course.title.replace(/#/g, '').replace(/\s+/g, '-').toLowerCase()}/me/list?course_id=${course.course_id}`
                                     )}><FaSearch /> Chi tiết
                                 </button>
-                                <button onClick={() => navigate('/course/update')}><CiEdit /> Sửa</button>
+                                <button onClick={() => navigate(`/course/update?course_id=${course.course_id}`)}><CiEdit /> Sửa</button>
                                 <button onClick={() => navigate('/course/delete')}><FaTrash /> Xóa</button>
                             </div>
                         </div>

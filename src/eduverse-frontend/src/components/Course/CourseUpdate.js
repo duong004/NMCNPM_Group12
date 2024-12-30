@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import './CourseCreate.css';
+import React, { useState, useEffect } from 'react';
+import './CourseUpdate.css';
 // import axios from 'axios';
 import api from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '../toast-message/toast-message'
-const SubmitCourseForm = () => {
+const CourseUpdate = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -17,6 +17,28 @@ const SubmitCourseForm = () => {
         status: '',
     });
 
+    useEffect(() => {
+        const fetchCourse = async () => {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const courseId = urlParams.get('course_id');
+                const response = await api.get(`http://localhost:5000/api/courses/detail/${courseId}`);
+                // Kiểm tra nếu response trả về mảng
+                const courseData = Array.isArray(response.data) ? response.data[0] : response.data;
+                setFormData(courseData); // Đổ dữ liệu vào formData
+            } catch (error) {
+                console.error('Lỗi khi tải thông tin khóa học:', error);
+                toast({
+                    title: 'Thất bại!',
+                    message: 'Không thể tải thông tin khóa học!',
+                    type: 'error',
+                    duration: 5000,
+                });
+            }
+        };
+        fetchCourse();
+    }, []);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -25,25 +47,20 @@ const SubmitCourseForm = () => {
         }));
     };
 
-    // const handleFileChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         cover_image: e.target.files[0],
-    //     });
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Gửi dữ liệu tới server API
         
         try {
-            const response = await api.post('http://localhost:5000/api/courses/create', formData);
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('course_id');
+            const response = await api.put(`http://localhost:5000/api/courses/update/${courseId}`, formData);
             
             console.log('Response:', response.data);
             // alert('Khóa học đã được gửi thành công!');
             toast({
                 title: "Thành công!",
-                message: "Khóa học đã được tạo thành công!",
+                message: "Khóa học đã được chỉnh sửa thành công!",
                 type: "success",
                 duration: 3000,
             });
@@ -77,41 +94,18 @@ const SubmitCourseForm = () => {
                 duration: 5000,
             });
         }
-        // fetch('http://localhost:5000/api/courses/create', {
-        //     method: 'POST',
-        //     body: form,
-        // })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         console.log('Response:', data);
-        //         alert('Khóa học đã được gửi thành công!');
-        //         setFormData({
-        //             title: '',
-        //             description: '',
-        //             teacher_id: 'U003',
-        //             duration: '',
-        //             category: '',
-        //             price: '',
-        //             cover_image: '',
-        //             status: '',
-        //         });
-        //     })
-        //     .catch((err) => {
-        //         console.error('Lỗi khi gửi dữ liệu:', err);
-        //         alert('Có lỗi xảy ra khi gửi dữ liệu.');
-        //     });
     };
 
     return (
         <div className="submit-course-form">
-            <h2>Thêm Khóa Học Mới</h2>
+            <h2>Chỉnh sửa thông tin khóa học</h2>
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="form-group">
                     <label>Tên khóa học:</label>
                     <input
                         type="text"
                         name="title"
-                        value={formData.title}
+                        value={formData.title || ''} // Kiểm tra giá trị null/undefined
                         onChange={handleChange}
                         required
                     />
@@ -121,7 +115,7 @@ const SubmitCourseForm = () => {
                     <label>Miêu tả:</label>
                     <textarea
                         name="description"
-                        value={formData.description}
+                        value={formData.description || ''}
                         onChange={handleChange}
                         rows="4"
                         required
@@ -133,7 +127,7 @@ const SubmitCourseForm = () => {
                     <input
                         type="number"
                         name="duration"
-                        value={formData.duration}
+                        value={formData.duration || ''}
                         onChange={handleChange}
                         required
                     />
@@ -143,7 +137,7 @@ const SubmitCourseForm = () => {
                     <label>Thể loại:</label>
                     <input
                         name="category"
-                        value={formData.category}
+                        value={formData.category || ''}
                         onChange={handleChange}
                         required
                     ></input>
@@ -154,7 +148,7 @@ const SubmitCourseForm = () => {
                     <input
                         type="number"
                         name="price"
-                        value={formData.price}
+                        value={formData.price || ''}
                         onChange={handleChange}
                         required
                     />
@@ -163,22 +157,19 @@ const SubmitCourseForm = () => {
                 <div className="form-group">
                     <label>Ảnh khóa học:</label>
                     <input
-                        // type="file"
-                        type = "text"
+                        type="text"
                         name="cover_image"
-                        value={formData.cover_image}
+                        value={formData.cover_image || ''}
                         onChange={handleChange}
-                        // accept="image/*"
-                        // onChange={handleFileChange}
                         required
                     />
                 </div>
 
-                {/* <div className="form-group">
+                <div className="form-group">
                     <label>Trạng thái:</label>
                     <select
                         name="status"
-                        value={formData.status}
+                        value={formData.status || ''}
                         onChange={handleChange}
                     >
                         <option value="Đang hoạt động">Đang hoạt động</option>
@@ -187,14 +178,15 @@ const SubmitCourseForm = () => {
                         <option value="Đang tạm dừng">Đang tạm dừng</option>
                         <option value="Đã xóa">Đã xóa</option>
                     </select>
-                </div> */}
+                </div>
 
-                <button className="btn-course-create" type="submit">Thêm khóa học</button>
+                <button className="btn-course_create" type="submit">Chỉnh sửa khóa học</button>
                 {/* Toast container */}
                 <div id="toast"></div>
             </form>
+
         </div>
     );
 };
 
-export default SubmitCourseForm;
+export default CourseUpdate;

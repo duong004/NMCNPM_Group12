@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaListUl } from "react-icons/fa6";
 import { LiaLaptopCodeSolid } from "react-icons/lia";
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../api';
 import { Link } from 'react-router-dom';
 import './CourseList.css';
 
@@ -13,7 +14,7 @@ const CourseList = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/courses/list');
+                const response = await api.get('http://localhost:5000/api/courses/list');
                 setCourses(response.data);
             } catch (error) {
                 console.error('Lỗi khi lấy dữ liệu:', error);
@@ -97,7 +98,12 @@ const CourseList = () => {
                 {currentCourses.map((course) => (
                     <div className="course-card" key={course.course_id}>
                         <div className="image">
-                            <img src={course.cover_image} alt="Khóa học" className="course-img" />
+                            <img src={course.cover_image} alt="Khóa học" className="course-img" 
+                                onError={(e) => {
+                                    e.target.onerror = null; // Prevents looping
+                                    e.target.src = 'https://soict.hust.edu.vn/wp-content/uploads/2019/05/a.jpg'; // Specify your fallback image path
+                                }}
+                            />
                         </div>
                         <div className="content">
                             <h3>{course.title}</h3>
