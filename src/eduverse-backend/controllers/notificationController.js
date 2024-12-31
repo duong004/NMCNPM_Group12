@@ -55,3 +55,33 @@ exports.getUserNotifications = async (req, res) => {
         return res.status(500).json({ message: "Lỗi server", error: error.message });
     }
 };
+
+// Đếm số thông báo chưa đọc
+exports.countUnreadNotifications = async (req, res) => {
+    try {
+        const userId = req.user.user_id; // Giả sử req.user chứa thông tin người dùng đã xác thực
+
+        const querySql = 'SELECT COUNT(*) as unreadCount FROM notifications WHERE user_id = ? AND is_read = 0';
+        const values = [userId];
+        const result = await query(querySql, values);
+
+        return res.status(200).json({ unreadCount: result[0].unreadCount });
+    } catch (error) {
+        return res.status(500).json({ message: "Lỗi server", error: error.message });
+    }
+};
+
+// Đánh dấu tất cả thông báo là đã đọc
+exports.markAllAsRead = async (req, res) => {
+    try {
+        const userId = req.user.user_id; // Giả sử req.user chứa thông tin người dùng đã xác thực
+
+        const updateSql = 'UPDATE notifications SET is_read = TRUE WHERE user_id = ?';
+        const values = [userId];
+        await query(updateSql, values);
+
+        return res.status(200).json({ message: "Tất cả thông báo đã được đánh dấu là đã đọc" });
+    } catch (error) {
+        return res.status(500).json({ message: "Lỗi server", error: error.message });
+    }
+};

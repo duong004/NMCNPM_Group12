@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
   const [userAvatar, setUserAvatar] = useState(defaultAvatar);
   const [userRole, setUserRole] = useState(null);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     // Kiểm tra xem có thông tin người dùng trong localStorage hay không
@@ -26,6 +27,12 @@ export const AuthProvider = ({ children }) => {
       const profilePicture = storedUserInfo.personalInfo?.[0]?.profile_picture;
       const avatar = profilePicture ? profilePicture : defaultAvatar; 
       setUserAvatar(avatar);
+
+      const storedNotifications = storedUserInfo.notifications;
+      if (storedNotifications) {
+        setNotifications(storedNotifications); // Lấy tất cả thông báo
+      }
+
     }else {
       setUserAvatar(defaultAvatar); // Đặt ảnh mặc định nếu không có storedUserInfo
     }
@@ -54,10 +61,15 @@ export const AuthProvider = ({ children }) => {
     const profilePicture = userData.personalInfo?.[0]?.profile_picture;
     const avatar = profilePicture ? profilePicture : defaultAvatar; 
     setUserAvatar(avatar);
+
+    const storedNotifications = userData.notifications;
+    if (storedNotifications) {
+      setNotifications(storedNotifications); // Lấy tất cả thông báo
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, userInfo, setUserInfo, userAvatar, setUserAvatar, logout, login, userRole, setUserRole }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, userInfo, setUserInfo, userAvatar, setUserAvatar, logout, login, userRole, setUserRole, notifications }}>
       {children}
     </AuthContext.Provider>
   );

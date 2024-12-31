@@ -85,7 +85,7 @@ exports.login = async (req, res) => {
             });
 
             const getNotifications = new Promise((resolve, reject) => {
-                const query = 'SELECT * FROM notifications WHERE `user_id` = ?';
+                const query = 'SELECT * FROM notifications WHERE `user_id` = ? LIMIT 20';
                 db.query(query, [userId], (err, data) => {
                     if (err) {
                         reject("undefined error while getting notifications");
