@@ -75,12 +75,15 @@ exports.getMaterialsByLesson = async (req, res) => {
               WHERE m.lesson_id = ? AND c.teacher_id = ?`;
           values = [lesson_id, userId];
       } else {
+        //   sql = `
+        //       SELECT m.*
+        //       FROM materials m
+        //       JOIN lessons l ON m.lesson_id = l.lesson_id
+        //       JOIN enrollments e ON l.course_id = e.course_id
+        //       WHERE m.lesson_id = ? AND e.student_id = ?`;
+        //   values = [lesson_id, userId];
           sql = `
-              SELECT m.*
-              FROM materials m
-              JOIN lessons l ON m.lesson_id = l.lesson_id
-              JOIN enrollments e ON l.course_id = e.course_id
-              WHERE m.lesson_id = ? AND e.student_id = ?`;
+              SELECT * FROM materials WHERE lesson_id = ?`;
           values = [lesson_id, userId];
       }
 
