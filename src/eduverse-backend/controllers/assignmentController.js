@@ -84,12 +84,15 @@ exports.getAssignmentsByLesson = async (req, res) => {
                 WHERE a.lesson_id = ? AND c.teacher_id = ?`;
             values = [lesson_id, userId];
         } else {
+            // sql = `
+            //     SELECT a.*
+            //     FROM assignments a
+            //     JOIN lessons l ON a.lesson_id = l.lesson_id
+            //     JOIN enrollments e ON l.course_id = e.course_id
+            //     WHERE a.lesson_id = ? AND e.student_id = ?`;
+            // values = [lesson_id, userId];
             sql = `
-                SELECT a.*
-                FROM assignments a
-                JOIN lessons l ON a.lesson_id = l.lesson_id
-                JOIN enrollments e ON l.course_id = e.course_id
-                WHERE a.lesson_id = ? AND e.student_id = ?`;
+                SELECT * FROM assignments WHERE lesson_id = ?`;
             values = [lesson_id, userId];
         }
 

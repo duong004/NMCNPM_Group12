@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import './Header.css';  
 import logo from '../../assets/images/EduVerse_apose_1.svg'; 
-import { FaSearch, FaCaretDown, FaGlobe, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaUser, FaBook, FaWallet, FaCertificate, FaCog, FaBell } from 'react-icons/fa';
+import { FaSearch, FaCaretDown, FaGlobe, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaUser, FaBook, FaWallet, FaCertificate, FaCog, FaBell, FaUserShield } from 'react-icons/fa';
 import { AuthContext } from '../../contexts/AuthContext';
 import { searchCourses } from './search'; // Import hàm tìm kiếm
 import { courses } from './courses'; // Import dữ liệu giả lập
@@ -232,7 +232,7 @@ const Header = () => {
                     <Link to="/course/me/list" className="header-avatar-menu-item"><FaBook /> Khóa học của tôi</Link>
                   )}
                   {(userRole === 'Quản trị viên') && (
-                    <Link to="/admin" className="header-avatar-menu-item">Trang quản trị</Link>
+                    <Link to="/admin" className="header-avatar-menu-item"><FaUserShield />Trang quản trị</Link>
                   )}
                   {(userRole === 'Học viên') && (
                     <Link to="/certificates" className="header-avatar-menu-item"><FaCertificate />Chứng chỉ của tôi</Link>
